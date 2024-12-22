@@ -63,7 +63,10 @@ return [
             'region' => env('DO_DEFAULT_REGION'),
             'bucket' => env('DO_BUCKET'),
             'endpoint' => env('DO_ENDPOINT'),
-            'url' => env('DO_URL')
+            'url' => env('DO_URL'),
+            'options' => [
+                'ACL' => 'public-read',
+            ],
         ],
 
     ],
