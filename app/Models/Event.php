@@ -39,4 +39,14 @@ class Event extends Model
         return $this->belongsToMany(User::class, 'user_events')
                     ->withPivot('ue_comment', 'ue_rate', 'is_favorite');
     }
+
+    public function getEImagesAttribute()
+    {
+        return config('filesystems.disks.do.url') . '/' . $this->attributes['e_images'];
+    }
+
+    public function getEVideosAttribute()
+    {
+        return config('filesystems.disks.do.url') . '/' . $this->attributes['e_videos'];
+    }
 }
