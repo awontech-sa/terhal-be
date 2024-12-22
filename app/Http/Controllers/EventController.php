@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+// use App\Http\Resources\AdminResources\EventResource;
 use App\Http\Resources\TouristResources\EventResource;
 use App\Models\Event;
 use Illuminate\Http\Request;
@@ -17,8 +18,7 @@ class EventController extends Controller
             'user',
             'attendees',
             'eventType',
-        ])
-        ->paginate(10);
+        ])->paginate(10);
 
         return EventResource::collection($events);
     }

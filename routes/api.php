@@ -7,6 +7,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\TourController;
@@ -19,13 +20,6 @@ Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
     Route::post('/admin/add-product-type', [AdminController::class, 'createProduct']);
 });
 // end admin routes
-
-// Route::post('upload-image', function () {         test with digital ocean
-//     request()->file('e_images')->store(
-//         'events-image',
-//         'do'
-//     );
-// });
 
 // start tour-guide routes
 Route::group(['middleware' => ['auth:sanctum', 'tour-guide']], function () {
@@ -75,3 +69,5 @@ Route::get('/setting/about', [SettingController::class, 'index']);
 Route::get('/setting/terms-conditions', [SettingController::class, 'show']);
 Route::get('/setting/policies', [SettingController::class, 'policies']);
 // end setting routes
+
+Route::get('/search', [SearchController::class, 'show']);

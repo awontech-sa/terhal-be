@@ -14,23 +14,23 @@ class TourController extends Controller
      */
     public function index(Request $request)
     {
-        $date = $request->input('date');
+        // $date = $request->input('date');
         $query = Tour::with([
             'user',
             'places.placeType',
             'participants'
-        ]);
+        ])->paginate(10);
 
-        if ($date) {
-            $query->whereDate('t_date', $date);
-        } else {
-            // Show only future tours
-            // $query->whereDate('t_date', '>', Carbon::now());
-        }
+        // if ($date) {
+        //     $query->whereDate('t_date', $date);
+        // } else {
+        //     // Show only future tours
+        //     // $query->whereDate('t_date', '>', Carbon::now());
+        // }
 
-        $data = $query->get();
+        // $data = $query->get();
 
-        return TourResource::collection($data);
+        return TourResource::collection($query);
     }
 
     /**

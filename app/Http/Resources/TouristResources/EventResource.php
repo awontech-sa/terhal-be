@@ -28,7 +28,7 @@ class EventResource extends JsonResource
             'event_date' => $this->e_date,
             'event_type_id' => $this->eventType->id,
             'event_type' => $this->eventType->et_name,
-            'attendees' => AttendeeResource::collection($this->attendees),
+            // 'attendees' => AttendeeResource::collection($this->attendees),
         ];
     }
 }
