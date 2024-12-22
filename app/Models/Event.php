@@ -37,12 +37,23 @@ class Event extends Model
     public function attendees()
     {
         return $this->belongsToMany(User::class, 'user_events')
-                    ->withPivot('ue_comment', 'ue_rate', 'is_favorite');
+            ->withPivot('ue_comment', 'ue_rate', 'is_favorite');
     }
 
     public function getEImagesAttribute()
     {
-        return config('filesystems.disks.do.url') . '/' . $this->attributes['e_images'];
+        $baseUrl = config('filesystems.disks.do.url');
+        $images = json_decode($this->attributes['e_images'], true);
+
+        if (is_array($images)) {
+            $formattedImages = array_map(function ($image) use ($baseUrl) {
+                return $baseUrl . '/' . $image;
+            }, $images);
+
+            return $formattedImages;
+        }
+
+        return [];
     }
 
     public function getEVideosAttribute()
