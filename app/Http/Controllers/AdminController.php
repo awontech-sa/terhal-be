@@ -30,16 +30,20 @@ class AdminController extends Controller
         // Handle image uploads
         if ($request->hasFile('e_images')) {
             foreach ($request->file('e_images') as $image) {
-                $path = $image->store('uploads/events', 'public');
+                $path = $image->store(
+                    'event-images',
+                    'do'
+                );
                 $imagePaths[] = $path;
             }
         }
-
-        // Handle video uploads
         if ($request->hasFile('e_videos')) {
             foreach ($request->file('e_videos') as $video) {
-                $path = $video->store('uploads/events', 'public');  // Correct path
-                $videoPaths[] = $path;
+                $path = $video->store(
+                    'event-videos',
+                    'do'
+                );
+                $videPath[] = $path;
             }
         }
 
