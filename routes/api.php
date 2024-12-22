@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 // start admin routes
 Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
     Route::post('/admin/add-event', [AdminController::class, 'create']);
+    Route::post('/admin/create-event-type', [AdminController::class, 'createEventType']);
     Route::post('/admin/add-product-type', [AdminController::class, 'createProduct']);
 });
 // end admin routes

@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminRequests\EventRequest;
 use App\Http\Requests\AdminRequests\ProductTypeRequest;
+use App\Http\Requests\EventTypeRequest;
 use App\Http\Resources\AdminResources\EventResource;
 use App\Http\Resources\AdminResources\ProductTypeResource;
+use App\Http\Resources\EventTypeResource;
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\EventType;
 use App\Models\ProductType;
 
 class AdminController extends Controller
@@ -93,5 +96,14 @@ class AdminController extends Controller
         $new_product_type = ProductType::create($data);
 
         return response()->json(new ProductTypeResource($new_product_type));
+    }
+
+    public function createEventType(EventTypeRequest $request)
+    {
+        $data = $request->validated();
+
+        $new_event_type = EventType::create($data);
+
+        return response()->json(new EventTypeResource($new_event_type));
     }
 }
