@@ -25,13 +25,13 @@ class EventRequest extends FormRequest
         return [
             "user_id" => 'exists:users,id',
             "event_type_id" => "exists:event_types,id",
-            "e_name" => "required|string|max:255",
-            "e_images.*" => 'required|image|mimes:jpeg,png,jpg,gif',
-            "e_location" => "required|string",
-            "e_price" => "required",
-            "e_description" => "required|string|max:288",
-            "e_date" => "required",
-            "e_rate" => "required",
+            "e_name" => "string|max:255",
+            "e_images.*" => 'image|mimes:jpeg,png,jpg,gif',
+            "e_location" => "string",
+            "e_price" => "integer",
+            "e_description" => "string|max:288",
+            "e_date" => "string",
+            "e_rate" => "string",
             "e_videos.*" => "mimes:mp4,mov"
         ];
     }
