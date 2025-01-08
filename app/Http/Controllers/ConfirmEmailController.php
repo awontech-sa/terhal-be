@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Mail;
 
 class ConfirmEmailController extends Controller
 {
-    public function sendOTP(Request $request)
+    public function sendOTP()
     {
         $otp = rand(1000, 9999);
 

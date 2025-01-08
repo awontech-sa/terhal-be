@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TouristRequests\BookingRequest;
 use App\Http\Resources\TouristResources\TourResource;
+use App\Http\Resources\TouristResources\UserTourResource;
 use App\Models\Tour;
-use Carbon\Carbon;
+use App\Models\UserTour;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TourController extends Controller
 {
@@ -14,23 +17,29 @@ class TourController extends Controller
      */
     public function index(Request $request)
     {
-        // $date = $request->input('date');
+        // Get the date from the request
+        $date = $request->input('date');
+
+        // Build the query with eager loading
         $query = Tour::with([
             'user',
             'places.placeType',
             'participants'
-        ])->paginate(10);
+        ]);
 
-        // if ($date) {
-        //     $query->whereDate('t_date', $date);
-        // } else {
-        //     // Show only future tours
-        //     // $query->whereDate('t_date', '>', Carbon::now());
-        // }
+        // Apply filter if date exists
+        if ($date) {
+            $query->whereDate('t_date', $date);
+        } else {
+            // Show only future tours
+            // $query->whereDate('t_date', '>', Carbon::now());
+        }
 
-        // $data = $query->get();
+        // paginate
+        $data = $query->paginate(10);
 
-        return TourResource::collection($query);
+        // Return the data as a resource
+        return TourResource::collection($data);
     }
 
     /**
@@ -55,13 +64,6 @@ class TourController extends Controller
     public function show()
     {
         $data = Tour::where('t_rate', 5)->select('t_name', 't_image', 't_date')->get();
-
-        return $data;
-    }
-
-    public function date(string $date)
-    {
-        $data = Tour::where('t_date', $date)->get();
 
         return $data;
     }
@@ -92,8 +94,97 @@ class TourController extends Controller
 
     public function tour(int $id)
     {
-        $tour = Tour::where('id', $id)->select('t_image', 't_videos', 't_name', 't_duration', 't_price', 't_description', )->get();
+        // tour with places and participants
+        $tour = Tour::with([
+            'places.placeType',
+            'participants'
+        ])->find($id);
 
-        return $tour;
+        return new TourResource($tour);
     }
+
+    public function booking(BookingRequest $request)
+    {
+        // Validate the incoming request
+        $validated = $request->validated();
+
+        // get the auth user form bearer token
+        $user = Auth::user();
+
+        try {
+            // Fetch the tour
+            $tour = Tour::findOrFail($validated['tour_id']);
+
+            // Check if the tour is already fully booked
+            $existingBookings = UserTour::where('tour_id', $validated['tour_id'])->sum('ut_count');
+            $remainingCapacity = $tour->visitor_limit - $existingBookings;
+
+            if ($validated['ut_count'] > $remainingCapacity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The tour is fully booked or the requested spots exceed available capacity.',
+                    'remaining_capacity' => $remainingCapacity,
+                ], 400);
+            }
+
+            // Calculate the total price
+            $totalPrice = $tour->t_price * $validated['ut_count'];
+
+            // Create a booking
+            $userTour = UserTour::create([
+                'tour_id' => $validated['tour_id'],
+                'user_id' => $user->id,
+                'ut_count' => $validated['ut_count'],
+                'ut_total_price' => $totalPrice,
+                'ut_comment' => $validated['ut_comment'] ?? '',
+                'ut_rate' => $validated['ut_rate'] ?? 0,
+                'ut_status' => 'تم الحجز',
+                'ut_uuid' => uniqid(),
+            ]);
+
+            return response()->json([
+                'message' => 'Tour booked successfully.',
+                'data' => new UserTourResource($userTour),
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to book the tour.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function bookingShow($id)
+    {
+        // Get the authenticated user from the Bearer token
+        $user = Auth::user();
+
+        try {
+            // Fetch the booking
+            $booking = UserTour::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            // If the booking does not exist or does not belong to the user, return an error
+            if (!$booking) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Booking not found or unauthorized access.',
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Booking details retrieved successfully.',
+                'data' => New UserTourResource($booking),
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to retrieve booking details.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }

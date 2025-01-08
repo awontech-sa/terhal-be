@@ -26,7 +26,7 @@ class AuthService
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
-            'password' => Hash::make($data['password']),
+            'password' => encrypt($data['password']),
             'status' => $data['status'],
             'age' => $data['age'],
             'gender' => $data['gender'],

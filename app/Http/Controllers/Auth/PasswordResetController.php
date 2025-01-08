@@ -44,7 +44,7 @@ class PasswordResetController extends Controller
 
         // update user password
         User::where('email', $request->email)
-            ->update(['password' => Hash::make($request->password)]);
+            ->update(['password' => encrypt($request->password)]);
 
         // delete password reset record
         PasswordReset::where('email', $request->email)->delete();

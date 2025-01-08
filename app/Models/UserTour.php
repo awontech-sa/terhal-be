@@ -16,7 +16,10 @@ class UserTour extends Model
         'ut_rate', // User rate on the tour
         'is_favorite', // Is the tour favorite
         'is_added', // Is the tour added
-        'ut_status' // User status on the tour
+        'ut_status', // User status on the tour
+        'ut_count', // User count on the tour
+        'ut_total_price', // User total price on the tour
+        'ut_uuid', // User unique id
     ];
 
     // Belongs to User

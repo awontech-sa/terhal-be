@@ -54,10 +54,13 @@ Route::get('events', [EventController::class, 'index']);
 // end events routes
 
 // start tours routes
-Route::get('/tours', [TourController::class, 'index']);
+Route::get('/tours', [TourController::class, 'index']);   //with date request
 Route::get('/top-tours', [TourController::class, 'show']);
 Route::get('/tour/{id}', [TourController::class, 'tour']);
-Route::get('/tours/{date}', [TourController::class, 'date']);
+
+// حجز الجولة
+Route::post('/tour/booking', [TourController::class, 'booking'])->middleware('auth:sanctum');
+Route::get('/tour/booking/{id}', [TourController::class, 'bookingShow'])->middleware('auth:sanctum');
 // end tours routes
 
 // start store routes
