@@ -44,7 +44,7 @@ class EventController extends Controller
      */
     public function show(int $event)
     {
-        $data = Event::where('event_type_id', $event)->select('e_images', 'e_videos', 'e_name', 'e_location', 'e_price', 'e_duration', 'e_description')->get();
+        $data = Event::where('event_type_id', $event)->get();
 
         return $data;
     }
