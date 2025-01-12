@@ -51,6 +51,9 @@ Route::post('/password-reset', [PasswordResetController::class, 'resetPassword']
 Route::get('events/{id}', [EventController::class, 'show']);
 Route::get('event-type', [EventTypeController::class, 'index']);
 Route::get('events', [EventController::class, 'index']);
+Route::get('events/{search}', [EventController::class, 'search']);
+Route::post('events/{event}/comment', [EventController::class, 'comment'])->middleware('auth:sanctum');
+Route::post('events/{event}/rate', [EventController::class, 'rate'])->middleware('auth:sanctum');
 // end events routes
 
 // start tours routes
@@ -65,7 +68,9 @@ Route::get('/tour/booking/{id}', [TourController::class, 'bookingShow'])->middle
 
 // start store routes
 Route::get('/products', [ProductController::class, 'index']);
+Route::get('/product/cart', [ProductController::class, 'showCart'])->middleware('auth:sanctum');
 Route::get('/product/{id}', [ProductController::class, 'show']);
+Route::put('/product/status/{product}/{id}', [ProductController::class, 'edit'])->middleware('auth:sanctum');
 // end store routes
 
 // start setting routes

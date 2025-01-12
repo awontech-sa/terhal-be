@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\StoreResources\ProductResource;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -55,18 +57,15 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function store(Product $product) {}
 
     /**
      * Display the specified resource.
      */
 
-     public function show(int $id)
+    public function show(int $id)
     {
-        $product = Product::where('id', $id)->select('pr_images', 'pr_videos', 'pr_price', 'pr_description')->get();
+        $product = Product::where('id', $id)->get();
 
         return $product;
     }
@@ -74,10 +73,20 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit(Request $request, Product $product, int $id)
     {
-        //
+        $seller = Auth::user(); // المستخدم الحالي (البائع)
+
+        $existProduct = $product->buyers()->where('user_id', $id)->first();
+
+        if ($existProduct) {
+            $product->buyers()->updateExistingPivot($id, [
+                'up_status' => $request->status,
+            ]);
+        }
+        return response()->json(['message' => 'تم تحديث حالة الطلب'], 200);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -93,5 +102,50 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    public function comment(Request $request, Product $product)
+    {
+        $user = Auth::user();
+
+        $existComment = $product->buyers()->where('user_id', $user->id)->first();
+        if ($existComment) {
+            $existComment->pivot->up_comment = $request->comment;
+            $existComment->pivot->save();
+        } else {
+            $product->buyers()->attach($user->id, [
+                'up_comment' => $request->comment
+            ]);
+        }
+
+        return response()->json(['message' => 'تم إضافة المراجعة'], 200);
+    }
+
+    public function rate(Request $request, Product $product)
+    {
+        $user = Auth::user();
+
+        $exstingRate = $product->buyers()->where('user_id', $user->id)->first();
+        if ($exstingRate) {
+            $exstingRate->pivot->up_rate = $request->rate;
+            $exstingRate->pivot->save();
+        } else {
+            $product->buyers()->attach($user->id, [
+                'up_rate' => $request->rate
+            ]);
+        }
+
+        return response()->json(['message' => 'تم إضافة التقييم'], 200);
+    }
+
+    public function showCart()
+    {
+        $user = Auth::user();
+
+        $buyer = User::where('id', $user->id)->first();
+
+        $cart = $buyer->purchasedProducts()->get();
+
+        return response()->json(["message" => $cart], 200);
     }
 }

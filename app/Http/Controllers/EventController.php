@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\TouristResources\EventResource;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -18,7 +19,7 @@ class EventController extends Controller
             'attendees',
             'eventType',
         ])
-        ->paginate(10);
+            ->paginate(10);
 
         return EventResource::collection($events);
     }
@@ -71,5 +72,52 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         //
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+        $events = Event::where('e_name', 'like', '%' . $search . '%')->get();
+
+        $result = collect();
+
+        if ($events->isNotEmpty()) {
+            $result = $result->merge($events);
+        }
+        return $result;
+    }
+
+    public function comment(Request $request, Event $event)
+    {
+        $user = Auth::user();
+
+        $existComment = $event->attendees()->where('user_id', $user->id)->first();
+        if ($existComment) {
+            $existComment->pivot->ue_comment = $request->comment;
+            $existComment->pivot->save();
+        } else {
+            $event->attendees()->attach($user->id, [
+                'ue_comment' => $request->comment
+            ]);
+        }
+
+        return response()->json(['message' => 'تم إضافة المراجعة'], 200);
+    }
+
+    public function rate(Request $request, Event $event)
+    {
+        $user = Auth::user();
+
+        $exstingRate = $event->attendees()->where('user_id', $user->id)->first();
+        if ($exstingRate) {
+            $exstingRate->pivot->ue_rate = $request->rate;
+            $exstingRate->pivot->save();
+        } else {
+            $event->attendees()->attach($user->id, [
+                'ue_rate' => $request->rate
+            ]);
+        }
+
+        return response()->json(['message' => 'تم إضافة التقييم'], 200);
     }
 }

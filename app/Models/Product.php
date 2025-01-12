@@ -38,5 +38,4 @@ class Product extends Model
         return $this->belongsToMany(User::class, 'user_products')
                     ->withPivot('up_comment', 'up_rate', 'is_favorite', 'is_buy', 'up_status');
     }
-
 }
