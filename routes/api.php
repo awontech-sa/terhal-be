@@ -6,6 +6,7 @@ use App\Http\Controllers\ConfirmEmailController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingController;
@@ -19,6 +20,8 @@ Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
     Route::post('/admin/add-event', [AdminController::class, 'create']);
     Route::post('/admin/create-event-type', [AdminController::class, 'createEventType']);
     Route::post('/admin/add-product-type', [AdminController::class, 'createProduct']);
+    Route::post('/admin/create-place-type', [AdminController::class, 'createPlaceType']);
+    Route::post('/admin/add-places', [AdminController::class, 'createPlace']);
 });
 // end admin routes
 
@@ -80,3 +83,7 @@ Route::get('/setting/policies', [SettingController::class, 'policies']);
 // end setting routes
 
 Route::get('/search', [SearchController::class, 'show']);
+
+//start places route
+Route::get('/places', [PlaceController::class, 'index']);
+//end places route
