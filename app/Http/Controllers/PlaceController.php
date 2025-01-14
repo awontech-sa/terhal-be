@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\AdminResources\PlaceResource;
+use App\Models\EventPlace;
 use App\Models\Place;
 use Illuminate\Http\Request;
 
@@ -13,7 +13,7 @@ class PlaceController extends Controller
      */
     public function index()
     {
-        $places = Place::all();
+        $places = EventPlace::all();
 
         return $places;
     }
