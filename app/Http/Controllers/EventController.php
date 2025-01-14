@@ -18,7 +18,7 @@ class EventController extends Controller
             'user',
             'attendees',
             'eventType',
-            'places.placeType'
+            'places'
         ])->paginate(10);
 
         return EventResource::collection($events);
