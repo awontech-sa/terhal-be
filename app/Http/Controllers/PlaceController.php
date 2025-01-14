@@ -13,7 +13,7 @@ class PlaceController extends Controller
      */
     public function index()
     {
-        $places = EventPlace::all();
+        $places = Place::all();
 
         return $places;
     }
