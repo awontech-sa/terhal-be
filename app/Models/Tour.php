@@ -28,12 +28,6 @@ class Tour extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Many-to-Many relationship with Places
-    public function places()
-    {
-        return $this->belongsToMany(Place::class, 'tour_places');
-    }
-
     // Many-to-Many relationship with Users (participants)
     public function participants()
     {

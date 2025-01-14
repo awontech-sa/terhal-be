@@ -6,18 +6,12 @@ use App\Http\Requests\AdminRequests\EventRequest;
 use App\Http\Requests\AdminRequests\ProductTypeRequest;
 use App\Http\Requests\EventTypeRequest;
 use App\Http\Resources\AdminResources\EventResource;
-use App\Http\Resources\AdminResources\PlaceResource;
 use App\Http\Resources\AdminResources\ProductTypeResource;
 use App\Http\Resources\EventTypeResource;
 use App\Models\Event;
 use App\Models\EventType;
 use App\Models\ProductType;
 use Illuminate\Http\Request;
-use App\Http\Requests\AdminRequests\PlaceRequest;
-use App\Http\Requests\AdminRequests\PlaceTypeRequest;
-use App\Http\Resources\AdminResources\PlaceTypeResource;
-use App\Models\Place;
-use App\Models\PlaceType;
 
 class AdminController extends Controller
 {
@@ -115,23 +109,5 @@ class AdminController extends Controller
         $new_event_type = EventType::create($data);
 
         return response()->json(new EventTypeResource($new_event_type));
-    }
-
-    public function createPlaceType(PlaceTypeRequest $request)
-    {
-        $data = $request->validated();
-
-        $newPlace = PlaceType::create($data);
-
-        return response()->json(new PlaceTypeResource($newPlace));
-    }
-
-    public function createPlace(PlaceRequest $request)
-    {
-        $data = $request->validated();
-
-        $newPlace = Place::create($data);
-
-        return response()->json(new PlaceResource($newPlace));
     }
 }

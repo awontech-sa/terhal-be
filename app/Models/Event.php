@@ -19,7 +19,9 @@ class Event extends Model
         'e_rate', // Event rate
         'e_videos', // Event videos
         'user_id', // User ID (creator of the event)
-        'event_type_id' // Event Type ID
+        'event_type_id',
+        'e_lang',
+        'e_lat' // Event Type ID
     ];
 
     // Belongs to User (creator of the event)
@@ -38,11 +40,6 @@ class Event extends Model
     {
         return $this->belongsToMany(User::class, 'user_events')
             ->withPivot('ue_comment', 'ue_rate', 'is_favorite');
-    }
-
-    public function places()
-    {
-        return $this->belongsToMany(Place::class, 'event_places');
     }
 
     public function getEImagesAttribute()

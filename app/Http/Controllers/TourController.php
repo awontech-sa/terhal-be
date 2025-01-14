@@ -23,7 +23,6 @@ class TourController extends Controller
         // Build the query with eager loading
         $query = Tour::with([
             'user',
-            'places.placeType',
             'participants'
         ]);
 
@@ -94,9 +93,8 @@ class TourController extends Controller
 
     public function tour(int $id)
     {
-        // tour with places and participants
+        // tour with participants
         $tour = Tour::with([
-            'places.placeType',
             'participants'
         ])->find($id);
 
@@ -146,7 +144,6 @@ class TourController extends Controller
                 'message' => 'Tour booked successfully.',
                 'data' => new UserTourResource($userTour),
             ], 201);
-
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Failed to book the tour.',
@@ -176,9 +173,8 @@ class TourController extends Controller
 
             return response()->json([
                 'message' => 'Booking details retrieved successfully.',
-                'data' => New UserTourResource($booking),
+                'data' => new UserTourResource($booking),
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Failed to retrieve booking details.',
@@ -186,5 +182,4 @@ class TourController extends Controller
             ], 500);
         }
     }
-
 }
