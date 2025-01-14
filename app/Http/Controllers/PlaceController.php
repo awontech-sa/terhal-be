@@ -13,9 +13,9 @@ class PlaceController extends Controller
      */
     public function index()
     {
-        $places = Place::paginate(10);
+        $places = Place::all();
 
-        return PlaceResource::collection($places);
+        return $places;
     }
 
     /**
