@@ -22,6 +22,11 @@ class Place extends Model
         return $this->belongsToMany(Tour::class, 'tour_places');
     }
 
+    public function events ()
+    {
+        return $this->belongsToMany(Event::class, 'event_places');
+    }
+
     // Many-to-One relationship with PlaceType
     public function placeType()
     {

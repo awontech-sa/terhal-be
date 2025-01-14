@@ -40,6 +40,11 @@ class Event extends Model
             ->withPivot('ue_comment', 'ue_rate', 'is_favorite');
     }
 
+    public function places()
+    {
+        return $this->belongsToMany(Place::class, 'event_places');
+    }
+
     public function getEImagesAttribute()
     {
         $baseUrl = config('filesystems.disks.do.url');
