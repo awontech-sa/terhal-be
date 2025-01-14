@@ -15,7 +15,7 @@ class PlaceController extends Controller
     {
         $places = Place::all();
 
-        return PlaceResource::collection($places);
+        return $places;
     }
 
     /**
