@@ -29,6 +29,7 @@ class EventResource extends JsonResource
             'event_type_id' => $this->eventType->id,
             'event_type' => $this->eventType->et_name,
             'attendees' => AttendeeResource::collection($this->attendees),
+            'places' => PlaceResource::collection($this->places)
         ];
     }
 }
