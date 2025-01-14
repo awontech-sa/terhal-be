@@ -3,6 +3,7 @@
 namespace App\Http\Requests\AdminRequests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\ValidationRule;
 
 class PlaceRequest extends FormRequest
 {
