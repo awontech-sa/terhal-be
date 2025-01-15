@@ -46,7 +46,7 @@ class EventController extends Controller
     {
         $data = Event::where('event_type_id', $event)->get();
 
-        return $data;
+        return EventResource::collection($data);
     }
 
     /**
