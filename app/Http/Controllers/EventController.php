@@ -20,7 +20,7 @@ class EventController extends Controller
             'eventType'
         ])->paginate(10);
 
-        return $events;
+        return EventResource::collection($events);
     }
 
     /**
