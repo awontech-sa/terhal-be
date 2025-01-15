@@ -30,7 +30,7 @@ class EventResource extends JsonResource
             'event_type' => $this->eventType->et_name,
             'e_lang' => $this->e_lang,
             'e_lat' => $this->e_lat,
-            'attendees' => AttendeeResource::collection($this->attendees)
+            // 'attendees' => AttendeeResource::collection($this->attendees)
         ];
     }
 }
