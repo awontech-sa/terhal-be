@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\TouristResources;
 
+use App\Http\Resources\AdminResources\EventResource as AdminResourcesEventResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,7 +17,7 @@ class EventResource extends JsonResource
     {
         return [
             'event_owner' => $this->user->name,
-            'event' => EventResource::collection($this->id),
+            'event' => AdminResourcesEventResource::collection($this->id),
             'event_type_id' => $this->eventType->id,
             'event_type' => $this->eventType->et_name,
             'attendees' => AttendeeResource::collection($this->attendees)
