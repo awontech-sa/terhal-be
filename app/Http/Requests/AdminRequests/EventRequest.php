@@ -32,7 +32,9 @@ class EventRequest extends FormRequest
             "e_description" => "string|max:288",
             "e_date" => "string",
             "e_rate" => "string",
-            "e_videos.*" => "mimes:mp4,mov"
+            "e_videos.*" => "mimes:mp4,mov",
+            'e_lang' => 'required|between:0,9999.999999',
+            'e_lat' => 'required|between:0,9999.999999'
         ];
     }
 }

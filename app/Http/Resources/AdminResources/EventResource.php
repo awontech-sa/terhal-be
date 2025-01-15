@@ -24,7 +24,9 @@ class EventResource extends JsonResource
             "e_description" => $this->e_description,
             "e_rate" => $this->e_rate,
             "e_date" => $this->e_date,
-            "e_videos" => $this->e_videos
+            "e_videos" => $this->e_videos,
+            'e_lang' => $this->e_lang,
+            'e_lat' => $this->e_lat
         ];
     }
 }
