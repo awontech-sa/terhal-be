@@ -18,13 +18,14 @@ class TourResource extends JsonResource
             "user_id" => $this->user_id,
             "t_name" => $this->t_name,
             "t_description" => $this->t_description,
-            "t_image" => $this->t_image ?? json_encode(["value" => ""]),
+            "t_image" => $this->t_image,
             "t_rate" => $this->t_rate,
             "t_date" => $this->t_date,
             "t_price" => $this->t_price,
-            "t_videos" => $this->t_videos ?? json_encode(["value" => ""]),
+            "t_videos" => $this->t_videos,
             't_duration' => $this->t_duration,
-            'visitor_limit' => $this->visitor_limit
+            'visitor_limit' => $this->visitor_limit,
+            't_places' => json_decode($this->t_places, true)
         ];
     }
 }

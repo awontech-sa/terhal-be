@@ -37,6 +37,7 @@ class AdminController extends Controller
                 $imagePaths[] = $path;
             }
         }
+        
         if ($request->hasFile('e_videos')) {
             foreach ($request->file('e_videos') as $video) {
                 $path = $video->store(

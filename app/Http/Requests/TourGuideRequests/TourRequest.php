@@ -23,15 +23,16 @@ class TourRequest extends FormRequest
     {
         return [
             "user_id" => 'exists:users,id',
-            "t_name" => "required|string|max:255",
-            "t_description" => "required|string|max:288",
-            "t_image.*" => 'required|image|mimes:jpeg,png,jpg,gif',
-            "t_rate" => "required",
-            "t_date" => "required",
-            "t_price" => "required",
-            "t_videos.*" => 'required|file|mimes:mp4,mov',
-            't_duration' => 'required|string',
-            'visitor_limit' => 'required'
+            "t_name" => "string|max:255",
+            "t_description" => "string|max:288",
+            "t_image.*" => 'image|mimes:jpeg,png,jpg,gif',
+            "t_rate" => "string",
+            "t_date" => "string",
+            "t_price" => "integer",
+            "t_videos.*" => 'file|mimes:mp4,mov',
+            't_duration' => 'string',
+            'visitor_limit' => 'integer',
+            't_places.*' => 'string|max:2800'
         ];
     }
 }

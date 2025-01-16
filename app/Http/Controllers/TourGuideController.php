@@ -19,8 +19,12 @@ class TourGuideController extends Controller
     public function create(TourRequest $request)
     {
         $data = $request->validated();
+        
         $imagePaths = [];
         $videPath = [];
+        $places = [];
+
+        error_log($request->user_id);
 
         if ($request->hasFile('t_image')) {
             foreach ($request->file('t_image') as $image) {
@@ -31,6 +35,7 @@ class TourGuideController extends Controller
                 $imagePaths[] = $path;
             }
         }
+
         if ($request->hasFile('t_videos')) {
             foreach ($request->file('t_videos') as $video) {
                 $path = $video->store(
@@ -41,9 +46,15 @@ class TourGuideController extends Controller
             }
         }
 
+        if ($request->has('t_places')) {
+            $places[] = $request->input('t_places');
+        }
+
 
         $data['t_image'] = json_encode($imagePaths);
         $data['t_videos'] = json_encode($videPath);
+        $data['t_places'] = json_encode($places);
+
         $new_tour = Tour::create($data);
 
         return response()->json(new TourResource($new_tour));

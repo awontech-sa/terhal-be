@@ -19,7 +19,8 @@ class Tour extends Model
         't_price', // Tour price
         't_videos',
         't_duration',
-        'visitor_limit'
+        'visitor_limit',
+        't_places'
     ];
 
     // Belongs to User (creator of the tour)
@@ -32,7 +33,22 @@ class Tour extends Model
     public function participants()
     {
         return $this->belongsToMany(User::class, 'user_tours')
-                    ->withPivot('ut_comment', 'ut_rate', 'is_favorite', 'is_added', 'ut_status');
+            ->withPivot('ut_comment', 'ut_rate', 'is_favorite', 'is_added', 'ut_status');
     }
 
+    public function getTImageAttribute()
+    {
+        $baseUrl = config('filesystems.disks.do.url');
+        $images = json_decode($this->attributes['t_image'], true);
+
+        if (is_array($images)) {
+            $formattedImages = array_map(function ($image) use ($baseUrl) {
+                return $baseUrl . '/' . $image;
+            }, $images);
+
+            return $formattedImages;
+        }
+
+        return [];
+    }
 }
