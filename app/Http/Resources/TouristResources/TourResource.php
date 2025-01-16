@@ -27,7 +27,7 @@ class TourResource extends JsonResource
             'date' => $this->t_date,
             'price' => $this->t_price,
             'participants' => ParticipantResource::collection($this->participants),
-            'places' => json_encode($this->t_places)
+            'places' => json_decode($this->t_places, true)
         ];
     }
 }
