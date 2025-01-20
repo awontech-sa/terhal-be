@@ -8,24 +8,45 @@ use App\Http\Requests\AuthRequests\SendOtpRequest;
 use App\Mail\ResetPasswordOTP;
 use App\Models\PasswordReset;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Services\SmsService;
 use Illuminate\Support\Facades\Mail;
 
 class PasswordResetController extends Controller
 {
+    protected $smsService;
+
+    public function __construct(SmsService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
+
     public function sendOTP(SendOtpRequest $request)
     {
-        $otp = rand(1000, 9999);
+        $data = $request->validated();
+        $otp = rand(10000, 99999);
+
         $email = $request->email;
+        $phone = $request->phone;
 
-        // save otp in password_resets table
-        PasswordReset::updateOrCreate(
-            ['email' => $email],
-            ['otp' => $otp, 'expires_at' => now()->addMinutes(10)]
-        );
+        if ($data['email'] != null) {
+            PasswordReset::updateOrCreate(
+                ['email' => $email],
+                ['otp' => $otp],
+                ['expires_at' => now()->addMinutes(10)],
+                ['phone' => $phone]
+            );
+            Mail::to($email)->send(new ResetPasswordOTP($otp));
+        }
 
-        // send otp to user email
-        Mail::to($email)->send(new ResetPasswordOTP($otp));
+        if ($data['phone'] != null) {
+            PasswordReset::updateOrCreate(
+                ['email' => $email],
+                ['otp' => $otp],
+                ['expires_at' => now()->addMinutes(10)],
+                ['phone' => $phone]
+            );
+            $this->smsService->sms($phone, $otp);
+        }
 
         return response()->json(['message' => 'OTP sent successfully.']);
     }

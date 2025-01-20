@@ -17,12 +17,14 @@ class SendOtpRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:users,email',
-        ];
+            'forget_pass_type' => 'required|string|in:email,phone',
+            'email' => 'nullable|required_if:forget_pass_type,email|email|exists:users,email',
+            'phone' => 'required_if:forget_pass_type,phone|string|max:15'
+        ];        
     }
 }
