@@ -4,9 +4,14 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class AuthService
 {
+    private $api_url = 'http://46.151.210.31:8080/websmpp/websms';
+    private $api_user;
+    private $api_pass;
+    private $api_sid;
 
     // Define a mapping between user_type_id and roles
     protected $roleMapping = [
@@ -17,6 +22,13 @@ class AuthService
         4 => 'متجر',        // Store
         5 => 'مرشد سياحي'  // tour-guide
     ];
+
+    public function __construct()
+    {
+        $this->api_user = config('app.broadnet.ApiUser');
+        $this->api_pass = config('app.broadnet.ApiPass');
+        $this->api_sid = config('app.broadnet.ApiSid');
+    }
 
     public function register(array $data)
     {
@@ -70,12 +82,17 @@ class AuthService
     {
         if (!isset($data['otp'])) {
             // Generate OTP
-            $otp = rand(100000, 999999);
+            $otp = rand(10000, 99999);
             Cache::put('otp_' . $user->phone, $otp, now()->addMinutes(5));
 
             // HERE implement send the OTP via SMS using another service
+            $url = "$this->api_url?user=$this->api_user&pass=$this->api_pass&sid=$this->api_sid&mno=$user->phone&type=4&text=رمز التحقق: $otp&respformat=json";
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+            ])->post($url);
 
-            return ['message' => 'OTP sent to your phone'];
+
+            return ['message' => $response];
         } else {
             // Validate OTP
             $cachedOtp = Cache::get('otp_' . $user->phone);

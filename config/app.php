@@ -123,6 +123,10 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'taqnyat_token' => env('TAQNYAT_TOKEN', "f36b8de8e37909927023e4abcd444550")
+    'broadnet' => [
+        'ApiUser' => env('API_USER'),
+        'ApiPass' => env('API_PASS'),
+        'ApiSid' => env('API_SID')
+    ]
 
 ];
