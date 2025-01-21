@@ -38,6 +38,8 @@ class RegisterRequest extends FormRequest
                 'regex:/[0-9]/',        // Must contain at least one number
                 'regex:/[@$!%*?&#-_]/'    // Must contain at least one special character
             ],
+            'national_id_image' => 'nullable|required_if:user_type_id,5|image|mimes:jpeg,png,jpg,gif',
+            'certificate' => 'nullable|required_if:user_type_id,5|file|mimes:pdf'
         ];
     }
 
