@@ -28,10 +28,7 @@ class TourController extends Controller
 
         // Apply filter if date exists
         if ($date) {
-            $query->whereDate('t_date', $date);
-        } else {
-            // Show only future tours
-            // $query->whereDate('t_date', '>', Carbon::now());
+            return $query->whereDate('t_date', $date);
         }
 
         // paginate
