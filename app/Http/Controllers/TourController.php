@@ -17,26 +17,22 @@ class TourController extends Controller
      */
     public function index(Request $request)
     {
-        // Get the date from the request
         $date = $request->input('date');
 
-        // Build the query with eager loading
         $query = Tour::with([
             'user',
             'participants'
         ]);
 
-        // Apply filter if date exists
         if ($date) {
-            return $query->whereDate('t_date', $date);
+            $query->whereDate('t_date', $date);
         }
 
-        // paginate
         $data = $query->paginate(10);
 
-        // Return the data as a resource
         return TourResource::collection($data);
     }
+
 
     /**
      * Show the form for creating a new resource.
