@@ -36,7 +36,6 @@ Route::group(['middleware' => ['auth:sanctum', 'store']], function () {
 
 // start auth routes
 Route::post('register', [AuthController::class, 'register']);
-Route::post('register/send-phone-otp', [AuthController::class, 'sendOtp']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 

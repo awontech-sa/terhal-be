@@ -25,18 +25,8 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $data = $request->validated();
-        $result = $this->authService->register($data);
-        return response()->json(['message' => $result], 201);
-    }
-
-    public function sendOtp(Request $request)
-    {
-        $data = $request->validate([
-            'phone' => 'required|string|max:15'
-        ]);
-
-        $result = $this->authService->sendPhoneOtp($data['phone']);
-        return response()->json(['response' => $result], 200);
+        $this->authService->register($data);
+        return response()->json(['message' => 'User created successfully'], 201);
     }
 
     public function login(LoginRequest $request)
