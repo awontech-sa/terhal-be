@@ -35,7 +35,7 @@ class AuthController extends Controller
             'phone' => 'required|string|max:15'
         ]);
 
-        $result = $this->authService->sendPhoneOtp($data);
+        $result = $this->authService->sendPhoneOtp($data['phone']);
         return response()->json(['response' => $result], 200);
     }
 

@@ -148,13 +148,13 @@ class AuthService
         $user->tokens()->delete();
     }
 
-    public function sendPhoneOtp(array $data)
+    public function sendPhoneOtp(string $phone)
     {
         $otp = rand(10000, 99999);
         // $otp = 11111;
-        Cache::put('otp_' . $data['phone'], $otp, now()->addMinute(5));
+        Cache::put('otp_' . $phone, $otp, now()->addMinute(5));
 
-        $url = "$this->api_url?user=$this->api_user&pass=$this->api_pass&sid=$this->api_sid&mno={$data['phone']}&type=4&text=رمز التحقق: $otp&respformat=json";
+        $url = "$this->api_url?user=$this->api_user&pass=$this->api_pass&sid=$this->api_sid&mno=$phone&type=4&text=رمز التحقق: $otp&respformat=json";
         Http::withHeaders([
             'Accept' => 'application/json',
         ])->post($url);
