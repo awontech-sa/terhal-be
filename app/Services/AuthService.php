@@ -32,54 +32,40 @@ class AuthService
 
     public function register(array $data)
     {
-        if (isset($data['phone'])) {
-            // $otp = rand(10000, 99999);
-            // $otp = 11111;
-            // Cache::put('otp_' . $data['phone'], $otp, now()->addMinute(5));
+        if (!isset($data['phone_otp'])) {
+            $otp = rand(10000, 99999);
+            Cache::put('otp_' . $data['phone'], $otp, now()->addMinutes(5));
 
-            // $url = "$this->api_url?user=$this->api_user&pass=$this->api_pass&sid=$this->api_sid&mno={$data['phone']}&type=4&text=رمز التحقق: $otp&respformat=json";
-            // $response = Http::withHeaders([
-            //     'Accept' => 'application/json',
-            // ])->post($url);
+            $url = "$this->api_url?user=$this->api_user&pass=$this->api_pass&sid=$this->api_sid&mno={$data['phone']}&type=4&text=رمز التحقق: $otp&respformat=json";
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+            ])->post($url);
 
-            // return $response;
-            return $this->sendPhoneOtp($data['phone']);
+            return [$otp];
+        } else {
+            $cachedOtp = Cache::get('otp_' . $data['phone']);
+            if ($data['phone_otp'] != $cachedOtp) {
+                return ['message' => 'Invalid OTP'];
+            } else {
+                $user = User::create([
+                    'user_type_id' => $data['user_type_id'],
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'phone' => $data['phone'],
+                    'password' => encrypt($data['password']),
+                    'status' => $data['status'],
+                    'age' => $data['age'],
+                    'gender' => $data['gender'],
+                ]);
+
+                // Assign role based on user_type_id
+                $role = $this->roleMapping[$data['user_type_id']];
+                if ($role) {
+                    $user->assignRole($role);
+                }
+            }
+            return $this->generateTokenResponse($user);
         }
-        // if (!isset($data['phone_otp'])) {
-        //     // $otp = rand(10000, 99999);
-        //     $otp = 11111;
-        //     Cache::put('otp_' . $data['phone'], $otp, now()->addMinutes(5));
-
-        //     // $url = "$this->api_url?user=$this->api_user&pass=$this->api_pass&sid=$this->api_sid&mno={$data['phone']}&type=4&text=رمز التحقق: $otp&respformat=json";
-        //     // $response = Http::withHeaders([
-        //     //     'Accept' => 'application/json',
-        //     // ])->post($url);
-
-        //     return [$otp];
-        // } else {
-        //     $cachedOtp = Cache::get('otp_' . $data['phone']);
-        //     if ($data['phone_otp'] != $cachedOtp) {
-        //         return ['message' => 'Invalid OTP'];
-        //     } else {
-        //         $user = User::create([
-        //             'user_type_id' => $data['user_type_id'],
-        //             'name' => $data['name'],
-        //             'email' => $data['email'],
-        //             'phone' => $data['phone'],
-        //             'password' => encrypt($data['password']),
-        //             'status' => $data['status'],
-        //             'age' => $data['age'],
-        //             'gender' => $data['gender'],
-        //         ]);
-
-        //         // Assign role based on user_type_id
-        //         $role = $this->roleMapping[$data['user_type_id']];
-        //         if ($role) {
-        //             $user->assignRole($role);
-        //         }
-        //     }
-        //     return $this->generateTokenResponse($user);
-        // }
     }
 
     public function login(array $data)
