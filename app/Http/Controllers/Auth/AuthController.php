@@ -22,11 +22,31 @@ class AuthController extends Controller
         $this->middleware('permission:log out', ['only' => ['logout']]);
     }
 
+    public function sendOtp(Request $request)
+    {
+        $data = $request->validate([
+            'phone' => 'required|string|max:15'
+        ]);
+
+        $result = $this->authService->sendPhoneOtp($data['phone']);
+        return response()->json(['data' => $result], 200);
+    }
+
     public function register(RegisterRequest $request)
     {
         $data = $request->validated();
-        $this->authService->register($data);
-        return response()->json(['message' => 'User created successfully'], 201);
+        $result = $this->authService->register($data);
+        return response()->json(['message' => $result], 201);
+    }
+
+    public function verifyOtp(Request $request) {
+        $data = $request->validate([
+            'otp' => 'integer',
+            'phone' => 'required|string|max:15'
+        ]);
+
+        $result = $this->authService->verifyPhoneOtp($data['otp'], $data['phone']);
+        return response()->json(['data' => $result]);
     }
 
     public function login(LoginRequest $request)

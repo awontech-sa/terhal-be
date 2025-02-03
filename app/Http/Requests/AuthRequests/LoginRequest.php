@@ -24,8 +24,8 @@ class LoginRequest extends FormRequest
         return [
             'phone' => 'required|string',
             'login_method' => 'required|string|in:password,otp',
-            'password' => 'required_if:login_method,password|string|nullable',
-            'otp' => '|nullable|string',
+            'password' => 'required_if:login_method,password|string',
+            'otp' => 'nullable|string',
         ];
     }
 }
