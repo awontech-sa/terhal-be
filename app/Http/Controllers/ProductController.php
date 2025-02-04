@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\StoreResources\ProductResource;
 use App\Models\Product;
+use App\Models\ProductType;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -63,11 +64,11 @@ class ProductController extends Controller
      * Display the specified resource.
      */
 
-    public function show(int $id)
+    public function show(Product $product)
     {
-        $product = Product::where('id', $id)->get();
+        $products = Product::where('id', $product->id)->get();
 
-        return $product;
+        return $products;
     }
 
     /**
@@ -147,5 +148,12 @@ class ProductController extends Controller
         $cart = $buyer->purchasedProducts()->get();
 
         return response()->json(["message" => $cart], 200);
+    }
+
+    public function showProduct(int $id)
+    {
+        $products = Product::where('product_type_id', $id)->get();
+
+        return $products;
     }
 }

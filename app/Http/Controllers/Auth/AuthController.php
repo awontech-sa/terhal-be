@@ -12,7 +12,6 @@ use App\Services\AuthService;
 
 class AuthController extends Controller
 {
-
     protected $authService;
 
     // Inject AuthService and apply middleware
@@ -39,7 +38,8 @@ class AuthController extends Controller
         return response()->json(['message' => $result], 201);
     }
 
-    public function verifyOtp(Request $request) {
+    public function verifyOtp(Request $request)
+    {
         $data = $request->validate([
             'otp' => 'integer',
             'phone' => 'required|string|max:15'

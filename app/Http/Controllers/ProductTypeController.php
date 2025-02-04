@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdminRequests\ProductTypeRequest;
+use App\Http\Resources\AdminResources\ProductTypeResource;
 use App\Models\ProductType;
 use Illuminate\Http\Request;
 
@@ -12,15 +14,21 @@ class ProductTypeController extends Controller
      */
     public function index()
     {
-        //
+        $product_type = ProductType::all();
+
+        return $product_type;
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(ProductTypeRequest $request)
     {
-        
+        $data = $request->validated();
+
+        $new_product_type = ProductType::create($data);
+
+        return response()->json(new ProductTypeResource($new_product_type));
     }
 
     /**
@@ -34,10 +42,7 @@ class ProductTypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ProductType $productType)
-    {
-        //
-    }
+    public function show(ProductType $productType) {}
 
     /**
      * Show the form for editing the specified resource.

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\EventType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EventTypeRequest;
+use App\Http\Resources\EventTypeResource;
 
 class EventTypeController extends Controller
 {
@@ -21,9 +23,13 @@ class EventTypeController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(EventTypeRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $new_event_type = EventType::create($data);
+
+        return response()->json(new EventTypeResource($new_event_type));
     }
 
     /**

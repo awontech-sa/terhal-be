@@ -7,6 +7,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StoreController;
@@ -17,8 +18,8 @@ use Illuminate\Support\Facades\Route;
 // start admin routes
 Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
     Route::post('/admin/add-event', [AdminController::class, 'create']);
-    Route::post('/admin/create-event-type', [AdminController::class, 'createEventType']);
-    Route::post('/admin/add-product-type', [AdminController::class, 'createProduct']);
+    Route::post('/admin/create-event-type', [EventTypeController::class, 'create']);
+    Route::post('/admin/add-product-type', [ProductTypeController::class, 'create']);
 });
 // end admin routes
 
@@ -35,9 +36,9 @@ Route::group(['middleware' => ['auth:sanctum', 'store']], function () {
 // end store routes
 
 // start auth routes
-Route::post('register/send-phone-otp', [AuthController::class, 'sendOtp']);
-Route::post('register/verify-phone-otp', [AuthController::class, 'verifyOtp']);
-Route::post('register', [AuthController::class, 'register']);
+Route::post('register', [AuthController::class, 'register']);  // 3
+Route::post('register/send-phone-otp', [AuthController::class, 'sendOtp']);  // 1
+Route::post('register/verify-phone-otp', [AuthController::class, 'verifyOtp']);  // 2
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
@@ -69,9 +70,11 @@ Route::get('/tour/booking/{id}', [TourController::class, 'bookingShow'])->middle
 // end tours routes
 
 // start store routes
+Route::get('/product-types', [ProductTypeController::class, 'index']);
+Route::get('/product-types/{id}', [ProductController::class, 'showProduct']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/product/cart', [ProductController::class, 'showCart'])->middleware('auth:sanctum');
-Route::get('/product/{id}', [ProductController::class, 'show']);
+Route::get('/product/{product}', [ProductController::class, 'show']);
 Route::put('/product/status/{product}/{id}', [ProductController::class, 'edit'])->middleware('auth:sanctum');
 // end store routes
 
