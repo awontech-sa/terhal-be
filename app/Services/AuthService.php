@@ -4,15 +4,9 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 
 class AuthService
 {
-    private $api_url = 'http://46.151.210.31:8080/websmpp/websms';
-    private $api_user;
-    private $api_pass;
-    private $api_sid;
-
     // Define a mapping between user_type_id and roles
     protected $roleMapping = [
         // 'user_type_id' => 'role_name'
@@ -23,11 +17,11 @@ class AuthService
         5 => 'مرشد سياحي'  // tour-guide
     ];
 
-    public function __construct()
+    protected $smsService;
+
+    public function __construct(SmsService $smsService)
     {
-        $this->api_user = config('app.broadnet.ApiUser');
-        $this->api_pass = config('app.broadnet.ApiPass');
-        $this->api_sid = config('app.broadnet.ApiSid');
+        $this->smsService = $smsService;
     }
 
     public function register(array $data)
@@ -83,17 +77,12 @@ class AuthService
     {
         if (!isset($data['otp'])) {
             // Generate OTP
-            $otp = rand(10000, 99999);
+            // $otp = rand(10000, 99999);
+            $otp = 11111;
             Cache::put('otp_' . $user->phone, $otp, now()->addMinutes(5));
 
-            // HERE implement send the OTP via SMS using another service
-            $url = "$this->api_url?user=$this->api_user&pass=$this->api_pass&sid=$this->api_sid&mno=$user->phone&type=4&text=رمز التحقق: $otp&respformat=json";
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-            ])->post($url);
+            $this->smsService->sms($user->phone, $otp);
 
-
-            return ['message' => $response];
         } else {
             // Validate OTP
             $cachedOtp = Cache::get('otp_' . $user->phone);
@@ -119,14 +108,10 @@ class AuthService
 
     public function sendPhoneOtp(string $phone)
     {
-        // $otp = rand(10000, 99999);
-        $otp = 11111;
+        $otp = rand(10000, 99999);
         Cache::put('otp_' . $phone, $otp, now()->addMinute(5));
 
-        // $url = "$this->api_url?user=$this->api_user&pass=$this->api_pass&sid=$this->api_sid&mno=$phone&type=4&text=رمز التحقق: $otp&respformat=json";
-        // Http::withHeaders([
-        //     'Accept' => 'application/json',
-        // ])->post($url);
+        $this->smsService->sms($phone, $otp);
 
         return response()->json([
             'message' => 'send otp successfully',
