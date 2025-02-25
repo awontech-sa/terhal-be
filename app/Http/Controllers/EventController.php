@@ -50,15 +50,9 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $event, Request $request)
+    public function show(int $event)
     {
-        $seachEvent = $request->input('search');
-
         $data = Event::where('event_type_id', $event)->get();
-
-        if ($seachEvent) {
-            $data->where('e_name', $seachEvent);
-        }
 
         return EventResource::collection($data);
     }
