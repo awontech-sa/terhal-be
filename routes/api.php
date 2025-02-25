@@ -54,7 +54,6 @@ Route::post('/password-reset', [PasswordResetController::class, 'resetPassword']
 Route::get('events/{id}', [EventController::class, 'show']);
 Route::get('event-type', [EventTypeController::class, 'index']);
 Route::get('events', [EventController::class, 'index']);
-Route::get('events/{search}', [EventController::class, 'search']);
 Route::post('events/{event}/comment', [EventController::class, 'comment'])->middleware('auth:sanctum');
 Route::post('events/{event}/rate', [EventController::class, 'rate'])->middleware('auth:sanctum');
 // end events routes
@@ -83,5 +82,3 @@ Route::get('/setting/about', [SettingController::class, 'index']);
 Route::get('/setting/terms-conditions', [SettingController::class, 'show']);
 Route::get('/setting/policies', [SettingController::class, 'policies']);
 // end setting routes
-
-Route::get('/search', [SearchController::class, 'show']);

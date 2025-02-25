@@ -12,13 +12,21 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $events = Event::with([
+        $event = $request->input('search');
+
+        $query = Event::with([
             'user',
             'attendees',
             'eventType'
-        ])->paginate(10);
+        ]);
+
+        if ($event) {
+            $query->where('e_name', $event);
+        }
+
+        $events = $query->paginate(10);
 
         return EventResource::collection($events);
     }
@@ -42,9 +50,15 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $event)
+    public function show(int $event, Request $request)
     {
+        $seachEvent = $request->input('search');
+
         $data = Event::where('event_type_id', $event)->get();
+
+        if ($seachEvent) {
+            $data->where('e_name', $seachEvent);
+        }
 
         return EventResource::collection($data);
     }
@@ -71,19 +85,6 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         //
-    }
-
-    public function search(Request $request)
-    {
-        $search = $request->input('search');
-        $events = Event::where('e_name', 'like', '%' . $search . '%')->get();
-
-        $result = collect();
-
-        if ($events->isNotEmpty()) {
-            $result = $result->merge($events);
-        }
-        return $result;
     }
 
     public function comment(Request $request, Event $event)
