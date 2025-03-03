@@ -13,6 +13,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\TourGuideController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 // start admin routes
@@ -81,4 +82,5 @@ Route::put('/product/status/{product}/{id}', [ProductController::class, 'edit'])
 Route::get('/setting/about', [SettingController::class, 'index']);
 Route::get('/setting/terms-conditions', [SettingController::class, 'show']);
 Route::get('/setting/policies', [SettingController::class, 'policies']);
+Route::get('/users', [UsersController::class, 'index']);
 // end setting routes
