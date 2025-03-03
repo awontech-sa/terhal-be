@@ -98,7 +98,7 @@ class AuthService
     {
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return ['access_token' => $token, 'token_type' => 'Bearer'];
+        return ['access_token' => $token, 'token_type' => 'Bearer', 'user' => $user, 'name' => $user];
     }
 
     public function logout($user)
