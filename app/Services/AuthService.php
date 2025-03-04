@@ -77,8 +77,8 @@ class AuthService
     {
         if (!isset($data['otp'])) {
             // Generate OTP
-            // $otp = rand(10000, 99999);
-            $otp = 11111;
+            $otp = rand(10000, 99999);
+            // $otp = 11111;
             Cache::put('otp_' . $user->phone, $otp, now()->addMinutes(5));
 
             $this->smsService->sms($user->phone, $otp);
