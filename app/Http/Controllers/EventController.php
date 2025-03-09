@@ -114,4 +114,21 @@ class EventController extends Controller
 
         return response()->json(['message' => 'تم إضافة التقييم'], 200);
     }
+
+    public function favorite(Request $request, Event $event)
+    {
+        $user = Auth::user();
+
+        $exstingFavorite = $event->attendees()->where('user_id', $user->id)->first();
+        if ($exstingFavorite) {
+            $exstingFavorite->pivot->is_favorite = $request->favorite;
+            $exstingFavorite->pivot->save();
+        } else {
+            $event->attendees()->attach($user->id, [
+                'is_favorite' => $request->favorite
+            ]);
+        }
+
+        return response()->json(['message' => 'تم إضافته إلى المفضلة'], 200);
+    }
 }

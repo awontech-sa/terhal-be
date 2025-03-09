@@ -57,6 +57,7 @@ Route::get('event-type', [EventTypeController::class, 'index']);
 Route::get('events', [EventController::class, 'index']);
 Route::post('events/{event}/comment', [EventController::class, 'comment'])->middleware('auth:sanctum');
 Route::post('events/{event}/rate', [EventController::class, 'rate'])->middleware('auth:sanctum');
+Route::post('events/{event}/favorite', [EventController::class, 'favorite'])->middleware('auth:sanctum');
 // end events routes
 
 // start tours routes
