@@ -91,12 +91,12 @@ class TourController extends Controller
         //
     }
 
-    public function tour(int $id)
+    public function tour(Tour $tour)
     {
         // tour with participants
         $tour = Tour::with([
             'participants'
-        ])->find($id);
+        ])->find($tour->id);
 
         return new TourResource($tour);
     }
