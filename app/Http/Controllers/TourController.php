@@ -182,4 +182,21 @@ class TourController extends Controller
             ], 500);
         }
     }
+
+    public function favorite(Request $request, Tour $tour)
+    {
+        $user = Auth::user();
+
+        $exstingFavorite = $tour->participants()->where('user_id', $user->id)->first();
+        if ($exstingFavorite) {
+            $exstingFavorite->pivot->is_favorite = $request->favorite;
+            $exstingFavorite->pivot->save();
+        } else {
+            $tour->participants()->attach($user->id, [
+                'is_favorite' => $request->favorite
+            ]);
+        }
+
+        return response()->json(['message' => 'تم إضافته إلى المفضلة'], 200);
+    }
 }
