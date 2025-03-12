@@ -187,13 +187,17 @@ class TourController extends Controller
     {
         $user = Auth::user();
 
+        error_log($request->ut_comment);
+
         $exstingFavorite = $tour->participants()->where('user_id', $user->id)->first();
         if ($exstingFavorite) {
             $exstingFavorite->pivot->is_favorite = $request->favorite;
+            $exstingFavorite->pivot->ut_comment = $request->ut_comment;
             $exstingFavorite->pivot->save();
         } else {
             $tour->participants()->attach($user->id, [
-                'is_favorite' => $request->favorite
+                'is_favorite' => $request->favorite,
+                'ut_comment' => $request->ut_comment
             ]);
         }
 
