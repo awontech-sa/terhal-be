@@ -42,7 +42,7 @@ Route::post('register/send-phone-otp', [AuthController::class, 'sendOtp']);  // 
 Route::post('register/verify-phone-otp', [AuthController::class, 'verifyOtp']);  // 2
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-Route::get('checkToken', [AuthController::class, 'validateToken']);
+Route::get('checkToken', [AuthController::class, 'validateToken'])->middleware('auth:sanctum');
 
 Route::post('confirm-email/send-otp', [ConfirmEmailController::class, 'sendOTP'])->middleware('auth:sanctum');
 Route::post('confirm-email', [ConfirmEmailController::class, 'verifyEmail'])->middleware('auth:sanctum');
