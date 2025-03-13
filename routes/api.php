@@ -49,6 +49,8 @@ Route::post('confirm-email', [ConfirmEmailController::class, 'verifyEmail'])->mi
 Route::post('/password-reset/send-otp', [PasswordResetController::class, 'sendOTP']);
 Route::post('/password-reset', [PasswordResetController::class, 'resetPassword']);
 
+Route::get('checkToken', [AuthController::class, 'validateToken'])->middleware('auth:sanctum');
+
 // end auth routes
 
 // start events routes

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 class AuthService
@@ -82,7 +83,6 @@ class AuthService
             Cache::put('otp_' . $user->phone, $otp, now()->addMinutes(5));
 
             $this->smsService->sms($user->phone, $otp);
-
         } else {
             // Validate OTP
             $cachedOtp = Cache::get('otp_' . $user->phone);
@@ -134,5 +134,14 @@ class AuthService
             'message' => 'تم التحقق بنجاح',
             'statusCode' => 200
         ], 200);
+    }
+
+    public function validateToken()
+    {
+        if (!Auth::check()) {
+            return response()->json(['status' => 'error', 'message' => 'Token expired'], 401);
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Token is valid']);
     }
 }

@@ -65,4 +65,9 @@ class AuthController extends Controller
         $result = $this->authService->logout($request->user());
         return new LogoutResource((object) $result);
     }
+
+    public function validateToken()
+    {
+        $this->authService->validateToken();
+    }
 }
