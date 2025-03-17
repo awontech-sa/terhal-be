@@ -135,13 +135,4 @@ class AuthService
             'statusCode' => 200
         ], 200);
     }
-
-    public function validateToken()
-    {
-        if (!Auth::check()) {
-            return response()->json(['status' => 'error', 'message' => 'Token expired'], 401);
-        }
-
-        return response()->json(['status' => 'success', 'message' => 'Token is valid']);
-    }
 }

@@ -9,6 +9,7 @@ use App\Http\Requests\AuthRequests\RegisterRequest;
 use App\Http\Resources\AuthResources\LoginResource;
 use App\Http\Resources\AuthResources\LogoutResource;
 use App\Services\AuthService;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -68,6 +69,10 @@ class AuthController extends Controller
 
     public function validateToken()
     {
-        $this->authService->validateToken();
+        if (!Auth::check()) {
+            return response()->json(['status' => 'error', 'message' => 'Token expired'], 401);
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Token is valid']);
     }
 }
