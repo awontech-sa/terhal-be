@@ -69,14 +69,10 @@ class AuthController extends Controller
 
     public function validateToken()
     {
-        try {
-            if (!Auth::check()) {
-                return response()->json(['status' => 'error', 'message' => 'Token expired'], 401);
-            }
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 500);
+        if (!Auth::check()) {
+            return response()->json(['status' => 'error', 'message' => 'Token expired'], 401);
         }
+
+        return response()->json(['status' => 'success', 'message' => 'Token is valid']);
     }
 }
