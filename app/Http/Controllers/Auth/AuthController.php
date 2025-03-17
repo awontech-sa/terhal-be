@@ -71,8 +71,8 @@ class AuthController extends Controller
     {
         if (!Auth::check()) {
             return response()->json(['status' => 'error', 'message' => 'Token expired'], 401);
+        } else {
+            return response()->json(['status' => 'success', 'message' => 'Token is valid']);
         }
-
-        return response()->json(['status' => 'success', 'message' => 'Token is valid']);
     }
 }
