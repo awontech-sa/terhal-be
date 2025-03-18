@@ -103,35 +103,26 @@ class TourController extends Controller
 
     public function booking(BookingRequest $request)
     {
-        // Validate the incoming request
         $validated = $request->validated();
 
-        // get the auth user form bearer token
         $user = Auth::user();
 
         try {
-            // Fetch the tour
             $tour = Tour::findOrFail($validated['tour_id']);
 
-            // Check if the tour is already fully booked
             $existingBookings = UserTour::where('tour_id', $validated['tour_id'])->sum('ut_count');
 
-            if ($existingBookings) {
-                $remainingCapacity = $tour->visitor_limit - $existingBookings;
-
-                if ($validated['ut_count'] > $remainingCapacity) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'The tour is fully booked or the requested spots exceed available capacity.',
-                        'remaining_capacity' => $remainingCapacity,
-                    ], 400);
-                }
+            $remainingCapacity = $tour->visitor_limit - $existingBookings;
+            if ($validated['ut_count'] > $remainingCapacity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The tour is fully booked or the requested spots exceed available capacity.',
+                    'remaining_capacity' => $remainingCapacity,
+                ], 400);
             }
 
-            // Calculate the total price
             $totalPrice = $tour->t_price * $validated['ut_count'];
 
-            // Create a booking
             $userTour = UserTour::create([
                 'tour_id' => $validated['tour_id'],
                 'user_id' => $user->id,
@@ -147,11 +138,6 @@ class TourController extends Controller
                 'message' => 'Tour booked successfully.',
                 'data' => new UserTourResource($userTour),
             ], 201);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'message' => 'Tour not found.',
-                'error' => $e->getMessage(),
-            ], 404);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Failed to book the tour.',
