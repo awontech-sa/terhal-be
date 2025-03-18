@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\TouristResources;
 
+use App\Http\Resources\TourGuideResources\TourResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
