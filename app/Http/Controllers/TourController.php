@@ -115,14 +115,17 @@ class TourController extends Controller
 
             // Check if the tour is already fully booked
             $existingBookings = UserTour::where('tour_id', $validated['tour_id'])->sum('ut_count');
-            $remainingCapacity = $tour->visitor_limit - $existingBookings;
 
-            if ($validated['ut_count'] > $remainingCapacity) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'The tour is fully booked or the requested spots exceed available capacity.',
-                    'remaining_capacity' => $remainingCapacity,
-                ], 400);
+            if ($existingBookings) {
+                $remainingCapacity = $tour->visitor_limit - $existingBookings;
+                
+                if ($validated['ut_count'] > $remainingCapacity) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'The tour is fully booked or the requested spots exceed available capacity.',
+                        'remaining_capacity' => $remainingCapacity,
+                    ], 400);
+                }
             }
 
             // Calculate the total price
