@@ -118,7 +118,7 @@ class TourController extends Controller
 
             if ($existingBookings) {
                 $remainingCapacity = $tour->visitor_limit - $existingBookings;
-                
+
                 if ($validated['ut_count'] > $remainingCapacity) {
                     return response()->json([
                         'success' => false,
@@ -147,6 +147,11 @@ class TourController extends Controller
                 'message' => 'Tour booked successfully.',
                 'data' => new UserTourResource($userTour),
             ], 201);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'Tour not found.',
+                'error' => $e->getMessage(),
+            ], 404);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Failed to book the tour.',
