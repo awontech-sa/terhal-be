@@ -46,24 +46,6 @@ class ProductController extends Controller
         return ProductResource::collection($products);
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Product $product) {}
-
-    /**
-     * Display the specified resource.
-     */
-
     public function show(Product $product)
     {
         $products = Product::where('id', $product->id)->get();
@@ -71,9 +53,6 @@ class ProductController extends Controller
         return $products;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Request $request, Product $product, int $id)
     {
         $seller = Auth::user(); // المستخدم الحالي (البائع)
@@ -86,57 +65,6 @@ class ProductController extends Controller
             ]);
         }
         return response()->json(['message' => 'تم تحديث حالة الطلب'], 200);
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Product $product)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product)
-    {
-        //
-    }
-
-    public function comment(Request $request, Product $product)
-    {
-        $user = Auth::user();
-
-        $existComment = $product->buyers()->where('user_id', $user->id)->first();
-        if ($existComment) {
-            $existComment->pivot->up_comment = $request->comment;
-            $existComment->pivot->save();
-        } else {
-            $product->buyers()->attach($user->id, [
-                'up_comment' => $request->comment
-            ]);
-        }
-
-        return response()->json(['message' => 'تم إضافة المراجعة'], 200);
-    }
-
-    public function rate(Request $request, Product $product)
-    {
-        $user = Auth::user();
-
-        $exstingRate = $product->buyers()->where('user_id', $user->id)->first();
-        if ($exstingRate) {
-            $exstingRate->pivot->up_rate = $request->rate;
-            $exstingRate->pivot->save();
-        } else {
-            $product->buyers()->attach($user->id, [
-                'up_rate' => $request->rate
-            ]);
-        }
-
-        return response()->json(['message' => 'تم إضافة التقييم'], 200);
     }
 
     public function showCart()
@@ -155,5 +83,22 @@ class ProductController extends Controller
         $products = Product::where('product_type_id', $id)->get();
 
         return $products;
+    }
+
+    public function addProductToCart(Request $request, Product $product)
+    {
+        $user = Auth::user();
+
+        $existProduct = $product->buyers()->where('user_id', $user->id)->first();
+        if ($existProduct) {
+            $existProduct->pivot->is_buy = $request->cart;
+            $existProduct->pivot->save();
+        } else {
+            $product->buyers()->attach($user->id, [
+                'is_buy' => $request->cart
+            ]);
+        }
+
+        return response()->json(['message' => 'تم إضافة المنتج للعربة'], 200);
     }
 }

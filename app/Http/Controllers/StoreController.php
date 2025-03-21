@@ -18,7 +18,7 @@ class StoreController extends Controller
         // Handle image uploads
         if ($request->hasFile('pr_images')) {
             foreach ($request->file('pr_images') as $image) {
-                $path = $image->store('uploads/products', 'public');
+                $path = $image->store('product-images', 'do');
                 $imagePaths[] = $path;
             }
         }
@@ -26,7 +26,7 @@ class StoreController extends Controller
         // Handle video uploads
         if ($request->hasFile('pr_videos')) {
             foreach ($request->file('pr_videos') as $video) {
-                $path = $video->store('uploads/products', 'public');  // Correct path
+                $path = $video->store('product-videos', 'do');  // Correct path
                 $videoPaths[] = $path;
             }
         }

@@ -24,8 +24,6 @@ class TourGuideController extends Controller
         $videPath = [];
         $places = [];
 
-        error_log($request->user_id);
-
         if ($request->hasFile('t_image')) {
             foreach ($request->file('t_image') as $image) {
                 $path = $image->store(

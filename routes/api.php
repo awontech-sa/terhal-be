@@ -79,6 +79,7 @@ Route::get('/product-types/{id}', [ProductController::class, 'showProduct']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/product/cart', [ProductController::class, 'showCart'])->middleware('auth:sanctum');
 Route::get('/product/{product}', [ProductController::class, 'show']);
+Route::post('/product/{product}/cart', [ProductController::class, 'addProductToCart'])->middleware('auth:sanctum');
 Route::put('/product/status/{product}/{id}', [ProductController::class, 'edit'])->middleware('auth:sanctum');
 // end store routes
 
