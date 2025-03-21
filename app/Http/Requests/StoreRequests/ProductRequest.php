@@ -25,7 +25,7 @@ class ProductRequest extends FormRequest
             'product_type_id' => 'exists:product_types,id',
             'user_id' => 'exists:users,id',
             'pr_images.*' => 'required|image|mimes:jpeg,png,jpg,gif',
-            'pr_videos.*' => 'required|mimes:mp4,mov',
+            'pr_videos.*' => 'mimes:mp4,mov',
             'pr_name' => 'required|string|max:255',
             'pr_price' => 'required|numeric',
             'pr_rates' => 'required|numeric',
