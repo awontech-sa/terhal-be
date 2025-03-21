@@ -82,7 +82,7 @@ class ProductController extends Controller
     {
         $products = Product::where('product_type_id', $id)->get();
 
-        return $products;
+        return ProductResource::collection($products);
     }
 
     public function addProductToCart(Request $request, Product $product)
