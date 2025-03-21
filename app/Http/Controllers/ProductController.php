@@ -101,4 +101,21 @@ class ProductController extends Controller
 
         return response()->json(['message' => 'تم إضافة المنتج للعربة'], 200);
     }
+
+    public function favorite(Request $request, Product $product)
+    {
+        $user = Auth::user();
+
+        $existProduct = $product->buyers()->where('user_id', $user->id)->first();
+        if ($existProduct) {
+            $existProduct->pivot->is_favorite = $request->favorite;
+            $existProduct->pivot->save();
+        } else {
+            $product->buyers()->attach($user->id, [
+                'is_favorite' => $request->favorite
+            ]);
+        }
+
+        return response()->json(['message' => 'تم إضافة المنتج إلى المفضلة'], 200);
+    }
 }
