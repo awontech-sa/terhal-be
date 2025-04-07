@@ -99,7 +99,7 @@ class ProductController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'تم إضافة المنتج للعربة'], 200);
+        return response()->json(['message' => 'تم الدفع بنجاح'], 200);
     }
 
     public function favorite(Request $request, Product $product)
