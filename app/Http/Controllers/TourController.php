@@ -152,20 +152,20 @@ class TourController extends Controller
         $user = Auth::user();
 
         try {
-            // Fetch the booking
-            $booking = UserTour::where('user_id', $user->id)->get();
+            // Fetch all bookings for the user
+            $bookings = UserTour::where('user_id', $user->id)->get();
 
-            // If the booking does not exist or does not belong to the user, return an error
-            if (!$booking) {
+            // If no bookings found, return an appropriate message
+            if ($bookings->isEmpty()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Booking not found or unauthorized access.',
+                    'message' => 'No bookings found for this user.',
                 ], 404);
             }
 
             return response()->json([
                 'message' => 'Booking details retrieved successfully.',
-                'data' => new UserTourResource($booking),
+                'data' => UserTourResource::collection($bookings),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
