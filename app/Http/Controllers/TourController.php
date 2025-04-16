@@ -184,12 +184,37 @@ class TourController extends Controller
         }
     }
 
+    public function userBooking()
+    {
+        try {
+            $user = Auth::user();
+
+            $booking = UserTour::where('user_id', $user->id)->with('tour')->paginate(10);
+            if (!$booking) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Booking not found or unauthorized access.',
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Booking details retrieved successfully.',
+                'data' => new UserTourResource($booking),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to retrieve booking details.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function rate(Request $request, Tour $tour)
     {
         $user = Auth::user();
 
         $exstingRate = $tour->participants()->where('user_id', $user->id)->first();
-        
+
         if ($exstingRate) {
             $exstingRate->pivot->ut_rate = $request->rate;
             $exstingRate->pivot->save();
