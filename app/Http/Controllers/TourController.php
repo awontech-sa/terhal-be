@@ -67,6 +67,37 @@ class TourController extends Controller
         return $data;
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Request $request, Tour $tour, int $id)
+    {
+        $existTour = $tour->participants()->where('user_id', $id)->first();
+
+        if ($existTour) {
+            $tour->participants()->updateExistingPivot($id, [
+                'ut_status' => $request->status,
+            ]);
+        }
+        return response()->json(['message' => 'تم تحديث حالة الجولة'], 200);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Tour $tour)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Tour $tour)
+    {
+        //
+    }
+
     public function tour(Tour $tour)
     {
         // tour with participants
@@ -151,6 +182,65 @@ class TourController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function rate(Request $request, Tour $tour)
+    {
+        $user = Auth::user();
+
+        $exstingRate = $tour->participants()->where('user_id', $user->id)->first();
+        
+        if ($exstingRate) {
+            $exstingRate->pivot->ut_rate = $request->rate;
+            $exstingRate->pivot->save();
+        } else {
+            $tour->participants()->attach($user->id, [
+                'ut_rate' => $request->rate
+            ]);
+        }
+
+        return response()->json(['message' => 'تم إضافة التقييم'], 200);
+    }
+
+    public function comment(Request $request, Tour $tour)
+    {
+        $user = Auth::user();
+
+        $existComment = $tour->participants()->where('user_id', $user->id)->first();
+
+        if ($existComment) {
+            $existComment->pivot->ut_comment = $request->comment;
+            $existComment->pivot->save();
+        } else {
+            $tour->participants()->attach($user->id, [
+                'ut_comment' => $request->comment
+            ]);
+        }
+
+        return response()->json(['message' => 'تم إضافة التعليق'], 200);
+    }
+
+    public function cancel($id)
+    {
+        $user = Auth::user();
+
+        $booking = UserTour::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        // check if a day has passed since the booking
+        if ($booking->created_at->diffInDays(now()) > 1) {
+            return response()->json([
+                'message' => 'لا يمكن إلغاء الحجز بعد مرور يوم',
+            ], 400);
+        }
+
+        $booking->ut_status = 2;
+        $booking->save();
+
+        return response()->json([
+            'message' => 'تم إلغاء الحجز بنجاح',
+        ], 200);
     }
 
     public function favorite(Request $request, Tour $tour)

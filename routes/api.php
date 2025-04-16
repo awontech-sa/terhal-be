@@ -64,13 +64,19 @@ Route::post('events/{event}/favorite', [EventController::class, 'favorite'])->mi
 
 // start tours routes
 Route::get('/tours', [TourController::class, 'index']);   //with date request
+
 Route::get('/top-tours', [TourController::class, 'show']);
+
 Route::get('/tour/{tour}', [TourController::class, 'tour']);
 Route::post('/tour/{tour}/favorite', [TourController::class, 'favorite'])->middleware('auth:sanctum');
+Route::post('/tour/{tour}/rate', [TourController::class, 'rate'])->middleware('auth:sanctum');
+Route::post('/tour/{tour}/comment', [TourController::class, 'comment'])->middleware('auth:sanctum');
 
-// حجز الجولة
+Route::put('/tour/status/{tour}/{id}', [TourController::class, 'edit'])->middleware('auth:sanctum');
+
 Route::post('/tour/booking', [TourController::class, 'booking'])->middleware('auth:sanctum');
 Route::get('/tour/booking/{id}', [TourController::class, 'bookingShow'])->middleware('auth:sanctum');
+Route::post('/tour/booking/cancel/{id}', [TourController::class, 'cancel'])->middleware('auth:sanctum');
 // end tours routes
 
 // start store routes
