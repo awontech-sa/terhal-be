@@ -67,30 +67,6 @@ class TourController extends Controller
         return $data;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Tour $tour)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Tour $tour)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Tour $tour)
-    {
-        //
-    }
-
     public function tour(Tour $tour)
     {
         // tour with participants
