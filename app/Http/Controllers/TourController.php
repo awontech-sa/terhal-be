@@ -146,7 +146,36 @@ class TourController extends Controller
         }
     }
 
-    public function bookingShow($id)
+    public function bookingShow()
+    {
+        // Get the authenticated user from the Bearer token
+        $user = Auth::user();
+
+        try {
+            // Fetch the booking
+            $booking = UserTour::where('user_id', $user->id)->first();
+
+            // If the booking does not exist or does not belong to the user, return an error
+            if (!$booking) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Booking not found or unauthorized access.',
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Booking details retrieved successfully.',
+                'data' => new UserTourResource($booking),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to retrieve booking details.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function bookingShowById($id)
     {
         // Get the authenticated user from the Bearer token
         $user = Auth::user();
