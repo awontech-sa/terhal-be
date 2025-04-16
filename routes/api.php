@@ -76,8 +76,8 @@ Route::put('/tour/status/{tour}/{id}', [TourController::class, 'edit'])->middlew
 
 Route::post('/tour/booking', [TourController::class, 'booking'])->middleware('auth:sanctum');
 Route::get('/tour/booking/{id}', [TourController::class, 'bookingShow'])->middleware('auth:sanctum');
-Route::post('/tour/booking/cancel/{id}', [TourController::class, 'cancel'])->middleware('auth:sanctum');
 Route::get('/tour/booking/user', [TourController::class, 'userBooking'])->middleware('auth:sanctum');
+Route::post('/tour/booking/cancel/{id}', [TourController::class, 'cancel'])->middleware('auth:sanctum');
 // end tours routes
 
 // start store routes
