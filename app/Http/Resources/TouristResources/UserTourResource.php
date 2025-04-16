@@ -17,7 +17,7 @@ class UserTourResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'tour_id' => $this->tour_id,
+            // 'tour_id' => $this->tour_id,
             'user_id' => $this->user_id,
             'ut_count' => $this->ut_count,
             'ut_total_price' => $this->ut_total_price,
