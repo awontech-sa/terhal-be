@@ -69,9 +69,8 @@ Route::get('/tour/{tour}', [TourController::class, 'tour']);
 Route::post('/tour/{tour}/favorite', [TourController::class, 'favorite'])->middleware('auth:sanctum');
 
 // حجز الجولة
-Route::get('/tour/booking', [TourController::class, 'bookingShow'])->middleware('auth:sanctum');
 Route::post('/tour/booking', [TourController::class, 'booking'])->middleware('auth:sanctum');
-Route::get('/tour/booking/{id}', [TourController::class, 'bookingShowById'])->middleware('auth:sanctum');
+Route::get('/tour/booking/{id}', [TourController::class, 'bookingShow'])->middleware('auth:sanctum');
 // end tours routes
 
 // start store routes
