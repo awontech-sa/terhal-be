@@ -153,7 +153,7 @@ class TourController extends Controller
 
         try {
             // Fetch the booking
-            $booking = UserTour::where('user_id', $user->id)->first();
+            $booking = UserTour::where('user_id', $user->id)->get();
 
             // If the booking does not exist or does not belong to the user, return an error
             if (!$booking) {
