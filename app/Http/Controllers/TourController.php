@@ -132,10 +132,10 @@ class TourController extends Controller
             $bookings = UserTour::where('user_id', $user->id)->get();
 
             // If no bookings found, return an appropriate message
-            if (!$bookings) {
+            if ($bookings->isEmpty()) {
                 return response()->json([
                     'success' => false,
-                    'message' => $bookings,
+                    'message' => 'No bookings found for this user.',
                 ], 404);
             }
 
