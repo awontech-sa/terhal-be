@@ -135,7 +135,7 @@ class TourController extends Controller
             if (!$bookings) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No bookings found for this user.',
+                    'message' => $bookings,
                 ], 404);
             }
 
