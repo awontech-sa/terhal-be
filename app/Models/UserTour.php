@@ -25,7 +25,7 @@ class UserTour extends Model
     // Belongs to User
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     // Belongs to Tour
