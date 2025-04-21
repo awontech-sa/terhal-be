@@ -160,7 +160,7 @@ class TourController extends Controller
         try {
             $booking = UserTour::where('user_id', $user->id)
                 ->with('tour')
-                ->first();
+                ->get();
 
             if (!$booking) {
                 return response()->json([
@@ -178,7 +178,7 @@ class TourController extends Controller
 
             return response()->json([
                 'message' => 'Booking details retrieved successfully.',
-                'data' => new UserTourResource($booking),
+                'data' => UserTourResource::collection($booking),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
