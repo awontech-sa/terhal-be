@@ -36,11 +36,6 @@ class Tour extends Model
             ->withPivot('ut_comment', 'ut_rate', 'is_favorite', 'is_added', 'ut_status');
     }
 
-    public function userTours()
-    {
-        return $this->hasMany(UserTour::class, 'tour_id');
-    }
-
     public function getTImageAttribute()
     {
         $baseUrl = config('filesystems.disks.do.url');
