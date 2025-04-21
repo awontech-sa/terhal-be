@@ -176,7 +176,7 @@ class TourController extends Controller
 
             return response()->json([
                 'message' => 'Booking details retrieved successfully.',
-                'data' => UserTourResource::collection($booking)
+                'data' => $booking
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
