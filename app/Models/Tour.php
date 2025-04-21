@@ -26,7 +26,7 @@ class Tour extends Model
     // Belongs to User (creator of the tour)
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 
     // Many-to-Many relationship with Users (participants)
