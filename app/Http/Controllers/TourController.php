@@ -158,7 +158,7 @@ class TourController extends Controller
         $user = Auth::user();
 
         try {
-            $booking = UserTour::where('user_id', $user->id)->with('tour');
+            $booking = UserTour::where('user_id', $user->id)->with('tour')->toArray();
 
             if (!$booking) {
                 return response()->json([
