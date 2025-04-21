@@ -158,25 +158,19 @@ class TourController extends Controller
         $user = Auth::user();
 
         try {
-            $booking = UserTour::where('user_id', $user->id)->with('tour')->get();
+            $bookings = UserTour::where('user_id', $user->id)->with('tour')->get();
 
-            if (!$booking) {
+            if ($bookings->isEmpty()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Booking not found.',
+                    'message' => 'No bookings found.',
                 ], 404);
             }
 
-            if (!$booking->tour) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Tour not found for this booking.',
-                ], 404);
-            }
-
+            // Return the collection using UserTourResource::collection()
             return response()->json([
-                'message' => 'Booking details retrieved successfully.',
-                'data' => new UserTourResource($booking->tour)
+                'message' => 'Bookings retrieved successfully.',
+                'data' => UserTourResource::collection($bookings)
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

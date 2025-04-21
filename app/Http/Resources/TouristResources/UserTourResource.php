@@ -25,7 +25,7 @@ class UserTourResource extends JsonResource
             'ut_rate' => $this->ut_rate,
             'ut_status' => $this->ut_status,
             'ut_uuid' => $this->ut_uuid,
-            'tour' => new TourResource($this->tour),
+            'tour' => new TourResource($this->whenLoaded('tour')),
         ];
     }
 }
