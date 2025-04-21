@@ -190,12 +190,12 @@ class TourController extends Controller
             $user = Auth::user();
 
             $booking = UserTour::where('user_id', $user->id)->with('tour')->paginate(10);
-            if (!$booking) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Booking not found or unauthorized access.',
-                ], 404);
-            }
+            // if (!$booking) {
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'Booking not found or unauthorized access.',
+            //     ], 404);
+            // }
 
             return response()->json([
                 'message' => 'Booking details retrieved successfully.',
