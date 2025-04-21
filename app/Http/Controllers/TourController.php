@@ -160,10 +160,10 @@ class TourController extends Controller
 
         try {
             // Fetch the booking
-            $booking = UserTour::where('user_id', $user->id)->with('tour')->get();
+            $bookings = UserTour::where('user_id', $user->id)->with('tour')->get();
 
             // If the booking does not exist or does not belong to the user, return an error
-            if (!$booking) {
+            if (!$bookings) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Booking not found or unauthorized access.',
@@ -172,7 +172,7 @@ class TourController extends Controller
 
             return response()->json([
                 'message' => 'Booking details retrieved successfully.',
-                'data' => $booking,
+                'data' => UserTourResource::collection($bookings),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
