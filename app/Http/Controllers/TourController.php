@@ -222,8 +222,7 @@ class TourController extends Controller
             $user = Auth::user();
 
             $booking = UserTour::where('id', $id)
-                ->where('user_id', $user->id)
-                ->first();
+                ->where('user_id', $user->id)->get();
 
             // check if a day has passed since the booking
             if ($booking->created_at->diffInDays(now()) > 1) {
