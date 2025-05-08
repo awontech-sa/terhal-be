@@ -218,25 +218,31 @@ class TourController extends Controller
 
     public function cancel($id)
     {
-        $user = Auth::user();
+        try {
+            $user = Auth::user();
 
-        $booking = UserTour::where('id', $id)
-            ->where('user_id', $user->id)
-            ->first();
+            $booking = UserTour::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
 
-        // check if a day has passed since the booking
-        if ($booking->created_at->diffInDays(now()) > 1) {
+            // check if a day has passed since the booking
+            if ($booking->created_at->diffInDays(now()) > 1) {
+                return response()->json([
+                    'message' => 'لا يمكن إلغاء الحجز بعد مرور يوم',
+                ], 400);
+            }
+
+            $booking->ut_status = 2;
+            $booking->save();
+
             return response()->json([
-                'message' => 'لا يمكن إلغاء الحجز بعد مرور يوم',
-            ], 400);
+                'message' => 'تم إلغاء الحجز بنجاح',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
         }
-
-        $booking->ut_status = 2;
-        $booking->save();
-
-        return response()->json([
-            'message' => 'تم إلغاء الحجز بنجاح',
-        ], 200);
     }
 
     public function favorite(Request $request, Tour $tour)
