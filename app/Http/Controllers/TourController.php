@@ -224,8 +224,6 @@ class TourController extends Controller
             $booking = UserTour::where('id', $id)
                 ->where('user_id', $user->id)->first();
 
-            error_log($booking);
-
             // check if a day has passed since the booking
             if ($booking->created_at->diffInDays(now()) > 1) {
                 return response()->json([
@@ -233,7 +231,7 @@ class TourController extends Controller
                 ], 400);
             }
 
-            $booking->ut_status = 2;
+            $booking->ut_status = 'ملغية';
             $booking->save();
 
             return response()->json([
