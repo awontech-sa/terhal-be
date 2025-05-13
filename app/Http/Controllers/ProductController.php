@@ -135,8 +135,11 @@ class ProductController extends Controller
                 ], 400);
             }
 
-            $booking->up_status = 'ملغية';
-            $booking->save();
+            $existProduct = Product::buyers()->where('user_id', $user->id)->first();
+            if ($existProduct) {
+                $existProduct->pivot->up_status = 'ملغي';
+                $existProduct->pivot->save();
+            }
 
             return response()->json([
                 'message' => 'تم إلغاء الطلب بنجاح',
