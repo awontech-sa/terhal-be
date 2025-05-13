@@ -79,15 +79,15 @@ Route::post('/tour/booking/cancel/{id}', [TourController::class, 'cancel'])->mid
 // end tours routes
 
 // start store routes
-Route::get('/product-types', [ProductTypeController::class, 'index']);
-Route::get('/product-types/{id}', [ProductController::class, 'showProduct']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/product/cart', [ProductController::class, 'showCart'])->middleware('auth:sanctum');
 Route::get('/product/{product}', [ProductController::class, 'show']);
 Route::post('/product/{product}/cart', [ProductController::class, 'addProductToCart'])->middleware('auth:sanctum');
 Route::post('/product/{product}/favorite', [ProductController::class, 'favorite'])->middleware('auth:sanctum');
-Route::put('/product/status/{product}/{id}', [ProductController::class, 'edit'])->middleware('auth:sanctum');
 Route::post('/product/cancel/{id}', [ProductController::class, 'cancel'])->middleware('auth:sanctum');
+Route::put('/product/status/{product}/{id}', [ProductController::class, 'edit'])->middleware('auth:sanctum');
+Route::get('/product-types', [ProductTypeController::class, 'index']);
+Route::get('/product-types/{id}', [ProductController::class, 'showProduct']);
 // end store routes
 
 // start setting routes
