@@ -87,6 +87,7 @@ Route::get('/product/{product}', [ProductController::class, 'show']);
 Route::post('/product/{product}/cart', [ProductController::class, 'addProductToCart'])->middleware('auth:sanctum');
 Route::post('/product/{product}/favorite', [ProductController::class, 'favorite'])->middleware('auth:sanctum');
 Route::put('/product/status/{product}/{id}', [ProductController::class, 'edit'])->middleware('auth:sanctum');
+Route::post('/product/cancel/{id}', [TourController::class, 'cancel'])->middleware('auth:sanctum');
 // end store routes
 
 // start setting routes

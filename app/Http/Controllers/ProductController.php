@@ -6,6 +6,7 @@ use App\Http\Resources\StoreResources\ProductResource;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\User;
+use App\Models\UserProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -117,5 +118,33 @@ class ProductController extends Controller
         }
 
         return response()->json(['message' => 'تم إضافة المنتج إلى المفضلة'], 200);
+    }
+
+    public function cancel($id)
+    {
+        try {
+            $user = Auth::user();
+
+            $booking = UserProduct::where('id', $id)
+                ->where('user_id', $user->id)->first();
+
+            // check if a day has passed since the booking
+            if ($booking->created_at->diffInDays(now()) > 1) {
+                return response()->json([
+                    'message' => 'لا يمكن إلغاء الطلب بعد مرور يوم',
+                ], 400);
+            }
+
+            $booking->up_status = 'ملغية';
+            $booking->save();
+
+            return response()->json([
+                'message' => 'تم إلغاء الطلب بنجاح',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 }
