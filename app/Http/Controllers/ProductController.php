@@ -75,7 +75,7 @@ class ProductController extends Controller
 
         $cart = $buyer->purchasedProducts()->get();
 
-        return response()->json(["message" => $cart], 200);
+        return response()->json(["payload" => $cart], 200);
     }
 
     public function showProduct(int $id)
