@@ -22,13 +22,13 @@ class UserProduct extends Model
     // Many-to-Many relationship between Users and Products
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     // Many-to-Many relationship between Products and Users
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
 }
