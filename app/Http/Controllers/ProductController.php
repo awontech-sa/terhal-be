@@ -125,11 +125,33 @@ class ProductController extends Controller
         try {
             $user = Auth::user();
 
-            $booking = UserProduct::where('id', $id)
-                ->where('user_id', $user->id)->first();
+            // Check if user is authenticated
+            if (!$user) {
+                return response()->json([
+                    'message' => 'يجب تسجيل الدخول أولاً',
+                ], 401);
+            }
 
-            // check if a day has passed since the booking
-            if ($booking->created_at->diffInDays(now()) > 1) {
+            $booking = UserProduct::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            // Check if booking exists
+            if (!$booking) {
+                return response()->json([
+                    'message' => 'الطلب غير موجود أو لا تملك صلاحية الإلغاء',
+                ], 404);
+            }
+
+            // Check if booking already cancelled
+            if ($booking->up_status === 'ملغي') {
+                return response()->json([
+                    'message' => 'تم إلغاء هذا الطلب مسبقاً',
+                ], 400);
+            }
+
+            // Check if a day has passed since the booking
+            if ($booking->created_at && $booking->created_at->diffInDays(now()) > 1) {
                 return response()->json([
                     'message' => 'لا يمكن إلغاء الطلب بعد مرور يوم',
                 ], 400);
@@ -143,7 +165,8 @@ class ProductController extends Controller
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => $e->getMessage(),
+                'message' => 'حدث خطأ أثناء معالجة طلبك',
+                'error' => $e->getMessage() // Only include this in development
             ], 500);
         }
     }
