@@ -30,7 +30,7 @@ class UsersController extends Controller
 
             return response()->json(['message' => 'تم جلب بيانات المستخدم بنجاح', 'data' => $user], 200);
         } catch (\Exception $e) {
-            response()->json(['message' => $e->getMessage()], 500);
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
