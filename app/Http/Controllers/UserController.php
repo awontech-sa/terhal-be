@@ -26,9 +26,9 @@ class UsersController extends Controller
                 return response()->json(['message' => 'المستخدم غير مسجل الدخول'], 401);
             }
 
-            $data = User::find($user->id);
+            // $data = User::find($user->id);
 
-            return response()->json(['message' => 'تم جلب بيانات المستخدم بنجاح', 'data' => $data], 200);
+            return response()->json(['message' => 'تم جلب بيانات المستخدم بنجاح', 'data' => $user], 200);
         } catch (\Exception $e) {
             response()->json(['message' => $e->getMessage()], 500);
         }
