@@ -19,15 +19,19 @@ class UsersController extends Controller
 
     public function show()
     {
-        $user = Auth::user();
+        try {
+            $user = Auth::user();
 
-        if (!$user) {
-            return response()->json(['message' => 'المستخدم غير مسجل الدخول'], 401);
+            if (!$user) {
+                return response()->json(['message' => 'المستخدم غير مسجل الدخول'], 401);
+            }
+
+            $data = User::find($user->id);
+
+            return response()->json(['message' => 'تم جلب بيانات المستخدم بنجاح', 'data' => $data], 200);
+        } catch (\Exception $e) {
+            response()->json(['message' => $e->getMessage()], 500);
         }
-
-        $data = User::find($user->id);
-
-        return response()->json(['message' => 'تم جلب بيانات المستخدم بنجاح', 'data' => $data], 200);
     }
 
     public function update(UpdateProfileRequest $request)
@@ -75,5 +79,4 @@ class UsersController extends Controller
 
         return response()->json(['message' => 'تم تحديث كلمة المرور بنجاح'], 200);
     }
-
 }
