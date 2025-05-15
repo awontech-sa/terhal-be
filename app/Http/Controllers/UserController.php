@@ -19,7 +19,8 @@ class UsersController extends Controller
 
     public function show()
     {
-        $data = User::find(Auth::user());
+        $user = Auth::user();
+        $data = User::find($user->id);
 
         return response()->json(['message' => 'تم جلب بيانات المستخدم بنجاح', 'data' => $data], 200);
     }
