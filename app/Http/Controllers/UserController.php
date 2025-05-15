@@ -23,24 +23,14 @@ class UsersController extends Controller
             $user = Auth::user();
 
             if (!$user) {
-                \Log::error('User not authenticated', ['auth' => Auth::check()]);
                 return response()->json(['message' => 'المستخدم غير مسجل الدخول'], 401);
             }
 
-            \Log::info('User profile fetched', ['user_id' => $user->id]);
-            return response()->json([
-                'message' => 'تم جلب بيانات المستخدم بنجاح',
-                'data' => $user
-            ], 200);
+            // $data = User::find($user->id);
+
+            return response()->json(['message' => 'تم جلب بيانات المستخدم بنجاح', 'data' => $user], 200);
         } catch (\Exception $e) {
-            \Log::error('Profile Error: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-                'user' => Auth::user() ? Auth::user()->id : null
-            ]);
-            return response()->json([
-                'message' => 'حدث خطأ في السيرفر',
-                'error' => $e->getMessage()
-            ], 500);
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
