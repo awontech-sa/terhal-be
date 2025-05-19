@@ -12,6 +12,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\TourGuideController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -97,10 +98,10 @@ Route::get('/setting/policies', [SettingController::class, 'policies']);
 // end setting routes
 
 // start user routes
-Route::get('/users', [UsersController::class, 'index']);
-Route::get('/user/profile', [UsersController::class, 'show'])->middleware('auth:sanctum'); // Show user profile
-Route::put('/user/profile/update', [UsersController::class, 'update'])->middleware('auth:sanctum'); // Update user profile
+Route::get('/users', [UserController::class, 'index']);
+Route::get('/user/profile', [UserController::class, 'show'])->middleware('auth:sanctum'); // Show user profile
+Route::put('/user/profile/update', [UserController::class, 'update'])->middleware('auth:sanctum'); // Update user profile
 Route::post('/user/update-email', [ConfirmEmailController::class, 'verifyUpdateEmailOtp'])->middleware('auth:sanctum'); // Verify OTP to update email
 Route::post('/user/update-email/send-otp', [ConfirmEmailController::class, 'sendUpdateEmailOtp'])->middleware('auth:sanctum'); // Send OTP to update email
-Route::put('/user/update-password', [UsersController::class, 'updatePassword'])->middleware('auth:sanctum'); // Update user password
+Route::put('/user/update-password', [UserController::class, 'updatePassword'])->middleware('auth:sanctum'); // Update user password
 // end user routes
