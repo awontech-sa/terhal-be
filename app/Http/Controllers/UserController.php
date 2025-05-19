@@ -21,10 +21,13 @@ class UsersController extends Controller
     {
         try {
             $user = Auth::user();
+            if (!$user) {
+                return response()->json(['message' => 'المستخدم غير مسجل'], 404);
+            }
 
             $userExist = User::find($user->id);
             if (!$userExist) {
-                return response()->json(['message' => 'المستخدم غير مسجل'], 404);
+                return response()->json(['message' => 'المستخدم غير موجود في النظام'], 404);
             }
 
             return response()->json(['message' => 'تم جلب بيانات المستخدم بنجاح', 'data' => $userExist], 200);
