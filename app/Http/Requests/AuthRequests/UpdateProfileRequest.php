@@ -23,7 +23,7 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'name' => 'string|max:255',
-            'phone' => 'string|max:10|min:10|unique:users,phone,',
+            'phone' => 'string|max:10|min:10|unique:users,phone',
             'gender' => 'string|in:ذكر,أنثى',
             'age' => 'integer|min:1|max:120', 
         ];
