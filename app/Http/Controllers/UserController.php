@@ -51,7 +51,7 @@ class UserController extends Controller
         $userExist->update($validatedData);
         $userExist->save();
 
-        return response()->json(['message' => 'تم تحديث البيانات بنجاح', 'data' => $user], 200);
+        return response()->json(['message' => 'تم تحديث البيانات بنجاح', 'data' => $userExist], 200);
     }
 
     public function updatePassword(Request $request)
