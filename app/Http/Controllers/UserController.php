@@ -30,7 +30,7 @@ class UsersController extends Controller
                 return response()->json(['message' => 'المستخدم غير موجود في النظام'], 404);
             }
 
-            return response()->json(['message' => 'تم جلب بيانات المستخدم بنجاح', 'data' => $userExist], 200);
+            return response()->json(['data' => $userExist], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
