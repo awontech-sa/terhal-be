@@ -22,13 +22,12 @@ class UsersController extends Controller
         try {
             $user = Auth::user();
 
-            if (!$user) {
-                return response()->json(['message' => 'المستخدم غير مسجل الدخول'], 401);
+            $userExist = User::find($user->id);
+            if (!$userExist) {
+                return response()->json(['message' => 'المستخدم غير مسجل'], 404);
             }
 
-            $data = User::find($user->id);
-
-            return response()->json(['message' => 'تم جلب بيانات المستخدم بنجاح', 'data' => $data], 200);
+            return response()->json(['message' => 'تم جلب بيانات المستخدم بنجاح', 'data' => $userExist], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
