@@ -42,37 +42,11 @@ class UserController extends Controller
         $validatedData = $request->validated();
 
         $user = Auth::user();
-        
+
+        $validatedData['password'] = Hash::make($validatedData['password']);
+
         $user->update($validatedData);
 
         return response()->json(['message' => 'تم تحديث البيانات بنجاح', 'data' => new UserUpdateResource($user)], 200);
-    }
-
-    public function updatePassword(Request $request)
-    {
-        $request->validate([
-            'old_password' => 'required',
-            'new_password' => 'required|min:8|confirmed',
-        ]);
-
-        $user = Auth::user();
-
-        $userExist = User::find($user->id);
-        if (! $userExist) {
-            return response()->json(['message' => 'المستخدم غير مسجل'], 404);
-        }
-
-        if (!Hash::check($request->old_password, $$userExist->password)) {
-            return response()->json(['message' => 'كلمة المرور القديمة غير صحيحة'], 422);
-        }
-
-        if ($request->old_password === $request->new_password) {
-            return response()->json(['message' => 'كلمة المرور الجديدة يجب أن تكون مختلفة عن القديمة'], 422);
-        }
-
-        $userExist->password = Hash::make($request->new_password);
-        $userExist->save();
-
-        return response()->json(['message' => 'تم تحديث كلمة المرور بنجاح'], 200);
     }
 }

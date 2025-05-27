@@ -25,7 +25,15 @@ class UpdateProfileRequest extends FormRequest
             'name' => 'string|max:255',
             'phone' => 'string|max:10|min:10|unique:users,phone',
             'gender' => 'string|in:ذكر,أنثى',
-            'age' => 'integer|min:1|max:120', 
+            'age' => 'integer|min:1|max:120',
+            'password' => [
+                'min:8',
+                'confirmed',
+                'regex:/[A-Z]/',        // Must contain at least one uppercase letter
+                'regex:/[a-z]/',        // Must contain at least one lowercase letter
+                'regex:/[0-9]/',        // Must contain at least one number
+                'regex:/[@$!%*?&#-_]/'    // Must contain at least one special character
+            ]
         ];
     }
 

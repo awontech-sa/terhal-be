@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
@@ -67,7 +68,7 @@ class AuthService
 
     protected function loginWithPassword($user, $password)
     {
-        if (!encrypt($password, $user->password)) {
+        if (!Hash::check($password, $user->password)) {
             return ['message' => 'The provided password is incorrect'];
         }
 

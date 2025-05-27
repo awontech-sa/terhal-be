@@ -103,5 +103,4 @@ Route::get('/user/profile', [UserController::class, 'show'])->middleware('auth:s
 Route::put('/user/profile/update', [UserController::class, 'update'])->middleware('auth:sanctum'); // Update user profile
 Route::post('/user/update-email', [ConfirmEmailController::class, 'verifyUpdateEmailOtp'])->middleware('auth:sanctum'); // Verify OTP to update email
 Route::post('/user/update-email/send-otp', [ConfirmEmailController::class, 'sendUpdateEmailOtp'])->middleware('auth:sanctum'); // Send OTP to update email
-Route::put('/user/update-password', [UserController::class, 'updatePassword'])->middleware('auth:sanctum'); // Update user password
 // end user routes
