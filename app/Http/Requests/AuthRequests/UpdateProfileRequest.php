@@ -17,13 +17,13 @@ class UpdateProfileRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'name' => 'string|max:255',
-            // 'phone' => 'string|max:10|min:10|unique:users,phone',
+            'phone' => 'string|max:10|min:10|unique:users,phone',
             'gender' => 'string|in:ذكر,أنثى',
             'age' => 'integer|min:1|max:120', 
         ];

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequests\UpdateProfileRequest;
+use App\Http\Resources\UserUpdateResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -41,17 +42,10 @@ class UserController extends Controller
         $validatedData = $request->validated();
 
         $user = Auth::user();
+        
+        $user->update($validatedData);
 
-        $userExist = User::find($user->id);
-
-        if (!$userExist) {
-            return response()->json(['message' => 'المستخدم غير مسجل'], 404);
-        }
-
-        $userExist->update($validatedData);
-        $userExist->save();
-
-        return response()->json(['message' => 'تم تحديث البيانات بنجاح', 'data' => $userExist], 200);
+        return response()->json(['message' => 'تم تحديث البيانات بنجاح', 'data' => new UserUpdateResource($user)], 200);
     }
 
     public function updatePassword(Request $request)
