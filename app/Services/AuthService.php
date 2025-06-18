@@ -33,7 +33,7 @@ class AuthService
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
-            'password' => encrypt($data['password']),
+            'password' => Hash::make($data['password']),
             'status' => $data['status'],
             'age' => $data['age'],
             'gender' => $data['gender'],
