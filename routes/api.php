@@ -54,9 +54,9 @@ Route::post('/password-reset', [PasswordResetController::class, 'resetPassword']
 // end auth routes
 
 // start events routes
-Route::get('events/{id}', [EventController::class, 'show']);
 Route::get('event-type', [EventTypeController::class, 'index']);
 Route::get('events', [EventController::class, 'index']);
+Route::get('events/{id}', [EventController::class, 'show']);
 Route::post('events/{event}/comment', [EventController::class, 'comment'])->middleware('auth:sanctum');
 Route::post('events/{event}/rate', [EventController::class, 'rate'])->middleware('auth:sanctum');
 Route::post('events/{event}/favorite', [EventController::class, 'favorite'])->middleware('auth:sanctum');

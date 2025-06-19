@@ -12,19 +12,13 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $event = $request->input('search');
-
         $query = Event::with([
             'user',
             'attendees',
             'eventType'
         ]);
-
-        if ($event) {
-            $query->where('e_name', $event);
-        }
 
         $events = $query->paginate(10);
 
@@ -50,9 +44,16 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $event)
+    public function show(Request $request, int $event)
     {
-        $data = Event::where('event_type_id', $event)->get();
+        $search = $request->input('search');
+
+        $query = Event::where('event_type_id', $event)->get();
+
+        if ($search) {
+            $query = Event::where('e_name', $search)->get();
+        }
+        $data = $query;
 
         return EventResource::collection($data);
     }
