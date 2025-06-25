@@ -60,20 +60,20 @@ class PasswordResetController extends Controller
     {
         $data = $request->validated();
 
-        $passwordReset = null;
+        // $passwordReset = null;
 
-        if (isset($data['email'])) {
-            $passwordReset = PasswordReset::where('email', $request->email)->where('otp', $request->otp)->first();
-        }
+        // if (isset($data['email'])) {
+        //     $passwordReset = PasswordReset::where('email', $request->email)->where('otp', $request->otp)->first();
+        // }
 
-        if (isset($data['phone'])) {
-            $passwordReset = PasswordReset::where('phone', $request->phone)->where('otp', $request->otp)->first();
-        }
+        // if (isset($data['phone'])) {
+        //     $passwordReset = PasswordReset::where('phone', $request->phone)->where('otp', $request->otp)->first();
+        // }
 
         // check if otp is invalid or expired
-        if (!$passwordReset || $passwordReset->expires_at < now()) {
-            return response()->json(['message' => 'Invalid or expired OTP.'], 400);
-        }
+        // if (!$passwordReset || $passwordReset->expires_at < now()) {
+        //     return response()->json(['message' => 'Invalid or expired OTP.'], 400);
+        // }
 
         // update user password
         if (isset($data['email'])) {
