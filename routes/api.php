@@ -49,6 +49,7 @@ Route::post('confirm-email', [ConfirmEmailController::class, 'verifyEmail'])->mi
 
 Route::post('/password-reset', [PasswordResetController::class, 'resetPassword']);
 Route::post('/password-reset/send-otp', [PasswordResetController::class, 'sendOTP']);
+Route::post('password-reset/verify-otp', [PasswordResetController::class, 'verifyOtp']);  // 2
 
 
 // end auth routes

@@ -8,16 +8,20 @@ use App\Http\Requests\AuthRequests\SendOtpRequest;
 use App\Mail\ResetPasswordOTP;
 use App\Models\PasswordReset;
 use App\Models\User;
+use App\Services\AuthService;
 use App\Services\SmsService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class PasswordResetController extends Controller
 {
     protected $smsService;
+    protected $authService;
 
-    public function __construct(SmsService $smsService)
+    public function __construct(SmsService $smsService, AuthService $authService)
     {
+        $this->authService = $authService;
         $this->smsService = $smsService;
     }
 
@@ -93,5 +97,16 @@ class PasswordResetController extends Controller
 
 
         return response()->json(['message' => 'Password reset successfully.']);
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $data = $request->validate([
+            'otp' => 'integer',
+            'phone' => 'required|string|max:15'
+        ]);
+
+        $result = $this->authService->verifyPhoneOtp($data['otp'], $data['phone']);
+        return response()->json(['data' => $result]);
     }
 }
