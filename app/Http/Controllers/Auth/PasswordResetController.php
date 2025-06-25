@@ -9,6 +9,7 @@ use App\Mail\ResetPasswordOTP;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Services\SmsService;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class PasswordResetController extends Controller
@@ -53,10 +54,19 @@ class PasswordResetController extends Controller
 
     public function resetPassword(ResetPasswordRequest $request)
     {
-        // get record from password_resets table by email and otp
-        $passwordReset = PasswordReset::where('email', $request->email)
-            ->where('otp', $request->otp)
-            ->first();
+        $data = $request->validated();
+
+        $email = $request->email;
+        $phone = $request->phone;
+        $passwordReset = null;
+
+        if ($data['email'] != null) {
+            $passwordReset = PasswordReset::where('email', $request->email)->where('otp', $request->otp)->first();
+        }
+
+        if ($data['phone'] != null) {
+            $passwordReset = PasswordReset::where('phone', $request->phone)->where('otp', $request->otp)->first();
+        }
 
         // check if otp is invalid or expired
         if (!$passwordReset || $passwordReset->expires_at < now()) {
@@ -64,11 +74,23 @@ class PasswordResetController extends Controller
         }
 
         // update user password
-        User::where('email', $request->email)
-            ->update(['password' => encrypt($request->password)]);
+        if ($data['email'] != null) {
+            User::where('email', $request->email)->update(['password' => Hash::make($request->password)]);
+        }
+
+        if ($data['phone'] != null) {
+            User::where('phone', $request->phone)->update(['password' => Hash::make($request->password)]);
+        }
 
         // delete password reset record
-        PasswordReset::where('email', $request->email)->delete();
+        if ($data['email'] != null) {
+            PasswordReset::where('email', $request->email)->delete();
+        }
+
+        if ($data['phone'] != null) {
+            PasswordReset::where('phone', $request->phone)->delete();
+        }
+
 
         return response()->json(['message' => 'Password reset successfully.']);
     }

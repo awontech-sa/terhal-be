@@ -24,7 +24,7 @@ class SendOtpRequest extends FormRequest
         return [
             'forget_pass_type' => 'required|string|in:email,phone',
             'email' => 'nullable|required_if:forget_pass_type,email|email|exists:users,email',
-            'phone' => 'required_if:forget_pass_type,phone|string|max:15'
+            'phone' => 'nullable|required_if:forget_pass_type,phone|string|max:15'
         ];        
     }
 }
