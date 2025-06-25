@@ -45,7 +45,7 @@ class PasswordResetController extends Controller
 
         if (isset($data['phone'])) {
             PasswordReset::updateOrCreate(
-                ['email' => $email],
+                ['phone' => $phone],
                 ['otp' => $otp],
                 ['expires_at' => now()->addMinutes(10)],
                 ['phone' => $phone]
@@ -60,8 +60,6 @@ class PasswordResetController extends Controller
     {
         $data = $request->validated();
 
-        $email = $request->email;
-        $phone = $request->phone;
         $passwordReset = null;
 
         if (isset($data['email'])) {
