@@ -33,7 +33,7 @@ class PasswordResetController extends Controller
         $email = $request->email;
         $phone = $request->phone;
 
-        if ($data['email'] != null) {
+        if (isset($data['email'])) {
             PasswordReset::updateOrCreate(
                 ['email' => $email],
                 ['otp' => $otp],
@@ -43,7 +43,7 @@ class PasswordResetController extends Controller
             Mail::to($email)->send(new ResetPasswordOTP($otp));
         }
 
-        if ($data['phone'] != null) {
+        if (isset($data['phone'])) {
             PasswordReset::updateOrCreate(
                 ['email' => $email],
                 ['otp' => $otp],
@@ -64,11 +64,11 @@ class PasswordResetController extends Controller
         $phone = $request->phone;
         $passwordReset = null;
 
-        if ($data['email'] != null) {
+        if (isset($data['email'])) {
             $passwordReset = PasswordReset::where('email', $request->email)->where('otp', $request->otp)->first();
         }
 
-        if ($data['phone'] != null) {
+        if (isset($data['phone'])) {
             $passwordReset = PasswordReset::where('phone', $request->phone)->where('otp', $request->otp)->first();
         }
 
@@ -78,20 +78,20 @@ class PasswordResetController extends Controller
         }
 
         // update user password
-        if ($data['email'] != null) {
+        if (isset($data['email'])) {
             User::where('email', $request->email)->update(['password' => Hash::make($request->password)]);
         }
 
-        if ($data['phone'] != null) {
+        if (isset($data['phone'])) {
             User::where('phone', $request->phone)->update(['password' => Hash::make($request->password)]);
         }
 
         // delete password reset record
-        if ($data['email'] != null) {
+        if (isset($data['email'])) {
             PasswordReset::where('email', $request->email)->delete();
         }
 
-        if ($data['phone'] != null) {
+        if (isset($data['phone'])) {
             PasswordReset::where('phone', $request->phone)->delete();
         }
 
