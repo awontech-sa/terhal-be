@@ -50,7 +50,7 @@ class PasswordResetController extends Controller
                 ['expires_at' => now()->addMinutes(10)],
                 ['phone' => $phone]
             );
-            $this->smsService->sms($phone, $otp);
+            $this->authService->sendPhoneOtp($data['phone']);
         }
 
         return response()->json(['message' => 'OTP sent successfully.']);
