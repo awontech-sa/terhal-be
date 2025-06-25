@@ -124,6 +124,9 @@ class AuthService
     {
         $cachedOtp = Cache::get('otp_' . $phone);
 
+        error_log($cachedOtp);
+        error_log($$otp);
+
         if ($cachedOtp != $otp) {
             return response()->json([
                 'message' => 'رقم التحقق خاطئ',
