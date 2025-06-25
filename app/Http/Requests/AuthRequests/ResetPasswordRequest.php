@@ -25,7 +25,7 @@ class ResetPasswordRequest extends FormRequest
             'forget_pass_type' => 'required|string|in:email,phone',
             'email' => 'nullable|required_if:forget_pass_type,email|email|exists:users,email',
             'phone' => 'nullable|required_if:forget_pass_type,phone|string|max:15',
-            'otp' => 'required',
+            'otp' => 'nullable',
             'password' => [
                 'required',
                 'min:8',
